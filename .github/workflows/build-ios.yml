@@ -16,9 +16,18 @@ jobs:
         run: xcodebuild -version
 
       - name: Setup Zig
-        uses: ziglang/setup-zig@v1
-        with:
-          version: master
+        run: |
+          # Use official Zig download index to find latest master
+          INDEX_JSON=$(curl -s https://ziglang.org/download/index.json)
+          URL=$(echo "$INDEX_JSON" | python3 -c "import sys, json; print(json.load(sys.stdin)['master']['aarch64-macos']['tarball'])")
+          VERSION=$(echo "$INDEX_JSON" | python3 -c "import sys, json; print(json.load(sys.stdin)['master']['aarch64-macos']['version'])")
+          echo "Installing Zig $VERSION from $URL"
+          curl -L "$URL" -o zig.tar.xz
+          mkdir -p "$HOME/zig"
+          tar -xJf zig.tar.xz -C "$HOME/zig" --strip-components=1
+          echo "$HOME/zig" >> $GITHUB_PATH
+          # Export to shared environment for following steps
+          echo "ZIG_EXE=$HOME/zig/zig" >> $GITHUB_ENV
 
       - name: Build rtach
         run: |
