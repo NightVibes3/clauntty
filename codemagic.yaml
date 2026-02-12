@@ -23,7 +23,7 @@ workflows:
           echo "=== Step 2: Clone dependencies ==="
           git clone https://github.com/eriklangille/rtach.git
           git clone -b clauntty https://github.com/eriklangille/ghostty.git
-          git clone https://github.com/mitchellh/libxev.git
+          git clone https://github.com/eriklangille/libxev.git
           
           echo "=== Directory contents ==="
           ls -la
@@ -41,22 +41,37 @@ workflows:
           echo ""
           echo "=== Step 5: Build rtach ==="
           cd "$BUILD_DIR/rtach"
-          zig build cross || echo "rtach build had issues, continuing"
+          # Patch zlib hash and force local libxev path
+          python3 -c "
+          import re
+          content = open('build.zig.zon').read()
+          content = content.replace('zlib-1.3.1-ZZQ7lc8NAABUbHzDe_cSWboCqMbrLkVwvFkKnojgeiT2', 'zlib-1.3.1-1-ZZQ7ldENAAA7qJjUXP6E6xnRuV-jDL9dyoJFc_eb3zQ6')
+          content = re.sub(r'\.libxev\s*=\s*\.\{.*?\},', '.libxev = .{ .path = \"../libxev\" },', content, flags=re.DOTALL)
+          open('build.zig.zon', 'w').write(content)
+          "
+          zig build cross
           
           echo ""
           echo "=== Step 6: Build Ghostty framework ==="
           cd "$BUILD_DIR/ghostty"
-          zig build -Demit-xcframework -Doptimize=ReleaseFast
+          # Force local libxev path
+          python3 -c "
+          import re
+          content = open('build.zig.zon').read()
+          content = re.sub(r'\.libxev\s*=\s*\.\{.*?\},', '.libxev = .{ .path = \"../libxev\" },', content, flags=re.DOTALL)
+          open('build.zig.zon', 'w').write(content)
+          "
+          zig build -Demit-xcframework -Doptimize=ReleaseFast -Demit-macos-app=false
           
           echo "=== Ghostty output ==="
-          ls -la "$BUILD_DIR/ghostty/zig-out/"
+          ls -la "$BUILD_DIR/ghostty/zig-out/" || ls -la "$BUILD_DIR/ghostty/macos/"
           
           echo ""
           echo "=== Step 7: Setup Frameworks ==="
           cd "$BUILD_DIR/clauntty"
           rm -rf Frameworks/GhosttyKit.xcframework
           mkdir -p Frameworks
-          cp -R "$BUILD_DIR/ghostty/zig-out/GhosttyKit.xcframework" Frameworks/
+          cp -R "$BUILD_DIR/ghostty/macos/GhosttyKit.xcframework" Frameworks/
           ls -la Frameworks/
           
           echo ""
