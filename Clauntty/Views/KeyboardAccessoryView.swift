@@ -99,13 +99,7 @@ class KeyboardAccessoryView: UIView {
     /// Main container (pill-shaped glass effect)
     private let containerEffectView: UIVisualEffectView = {
         let effect: UIVisualEffect
-        if #available(iOS 26.0, *) {
-            let glassEffect = UIGlassEffect()
-            glassEffect.isInteractive = true
-            effect = glassEffect
-        } else {
-            effect = UIBlurEffect(style: .systemMaterial)
-        }
+        effect = UIBlurEffect(style: .systemMaterial)
         let view = UIVisualEffectView(effect: effect)
         view.clipsToBounds = true
         return view
@@ -1227,13 +1221,7 @@ class CollapsedKeyboardBar: UIView {
 
     private let containerEffectView: UIVisualEffectView = {
         let effect: UIVisualEffect
-        if #available(iOS 26.0, *) {
-            let glassEffect = UIGlassEffect()
-            glassEffect.isInteractive = true
-            effect = glassEffect
-        } else {
-            effect = UIBlurEffect(style: .systemMaterial)
-        }
+        effect = UIBlurEffect(style: .systemMaterial)
         let view = UIVisualEffectView(effect: effect)
         view.clipsToBounds = true
         return view

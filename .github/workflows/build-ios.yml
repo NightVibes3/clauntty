@@ -5,33 +5,13 @@ on:
     branches: [main]
 jobs:
   build:
-    runs-on: macos-15
+    runs-on: macos-latest
     steps:
       - name: Check out clauntty
         uses: actions/checkout@v4
-      - name: Select Xcode 16
-        run: |
-          sudo xcode-select -s /Applications/Xcode_16.app || sudo xcode-select -s /Applications/Xcode.app
-          xcodebuild -version
-          xcodebuild -showsdks
-      - name: Install iOS 26 Beta SDK
-        run: |
-          echo "=== Checking available platforms ==="
-          xcrun simctl list runtimes
-          echo "=== Trying to download iOS 26 platform ==="
-          xcodebuild -downloadPlatform iOS -version 26.0 || echo "iOS 26 download failed"
-          echo "=== Checking what iOS platforms are available ==="
-          xcodebuild -showsdks | grep -i ios || true
-          echo "=== Running xcodebuild -runFirstLaunch ==="
-          sudo xcodebuild -runFirstLaunch || true
-          echo "=== Checking SDKs in Xcode ==="
-          ls -la /Applications/Xcode_16.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/ 2>/dev/null || true
-          ls -la /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/ 2>/dev/null || true
       - name: Setup Zig 0.15.2
         run: |
-          # Correct URL: zig-aarch64-macos-0.15.2.tar.xz (not zig-macos-aarch64)
           ZIG_URL="https://ziglang.org/download/0.15.2/zig-aarch64-macos-0.15.2.tar.xz"
-          echo "Downloading Zig from $ZIG_URL"
           curl -L "$ZIG_URL" -o zig.tar.xz
           mkdir -p "$HOME/zig"
           tar -xJf zig.tar.xz -C "$HOME/zig" --strip-components=1
@@ -45,10 +25,6 @@ jobs:
           git clone https://github.com/eriklangille/rtach.git
           git clone -b clauntty https://github.com/eriklangille/ghostty.git
           git clone https://github.com/mitchellh/libxev.git
-      - name: Initialize Xcode
-        run: |
-          xcodebuild -version
-          xcodebuild -downloadComponent MetalToolchain || true
       - name: Build Ghostty framework
         run: |
           cd "$HOME/clauntty-build/ghostty"
@@ -62,7 +38,6 @@ jobs:
       - name: Build and Package IPA
         run: |
           cd "$HOME/clauntty-build/clauntty"
-          # Build with verbose output and capture all logs
           xcodebuild -project Clauntty.xcodeproj \
             -scheme Clauntty \
             -sdk iphoneos \
@@ -71,16 +46,9 @@ jobs:
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO \
-            clean archive \
-            | tee xcodebuild.log || EXIT_CODE=$?
-          echo "=== Build completed with exit code: ${EXIT_CODE:-0} ==="
-          # Find the archive
-          echo "=== Searching for archive ==="
-          find ~/Library/Developer/Xcode/DerivedData -name "*.xcarchive" -type d 2>/dev/null || true
-          # Try alternative packaging
+            clean archive | tee xcodebuild.log || EXIT_CODE=$?
           ARCHIVE_PATH="build/Clauntty.xcarchive"
           if [ -d "$ARCHIVE_PATH" ]; then
-            echo "Found archive at: $ARCHIVE_PATH"
             mkdir -p Payload
             cp -r "$ARCHIVE_PATH/Products/Applications/Clauntty.app" Payload/ 2>/dev/null || \
               cp -r "build/Release-iphoneos/Clauntty.app" Payload/ 2>/dev/null || \
@@ -89,7 +57,6 @@ jobs:
             cp Clauntty.ipa "$GITHUB_WORKSPACE/"
           else
             echo "=== ERROR: Archive not found ==="
-            echo "Contents of build directory:"
             ls -la build/ 2>/dev/null || true
             exit 1
           fi
