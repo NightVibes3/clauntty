@@ -58,7 +58,7 @@ jobs:
           
           rm -rf Frameworks/GhosttyKit.xcframework
           mkdir -p Frameworks
-          cp -R "$HOME/clauntty-build/ghostty/zig-out/GhosttyKit.xcframework" Frameworks/
+          cp -R "$HOME/clauntty-build/ghostty/macos/GhosttyKit.xcframework" Frameworks/
           ls -la Frameworks/
 
       - name: Copy rtach binaries
