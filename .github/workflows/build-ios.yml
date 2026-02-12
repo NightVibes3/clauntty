@@ -16,9 +16,9 @@ jobs:
         run: xcodebuild -version
 
       - name: Setup Zig
-        uses: mlugg/setup-zig@v1
+        uses: ziglang/setup-zig@v1
         with:
-          version: master # Ghostty requires 0.15.2+ which is currently master
+          version: master
 
       - name: Build rtach
         run: |
