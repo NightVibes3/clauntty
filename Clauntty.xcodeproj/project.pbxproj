@@ -1,0 +1,993 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 60;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		06E63D06C52859FA31DA95C7 /* SSHKeyImportSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B06CB21407D10878E71D108 /* SSHKeyImportSheet.swift */; };
+		1855E705517197F275A5035F /* GhosttyBridgeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A94312DEE2648E8104E3AE53 /* GhosttyBridgeTests.swift */; };
+		3FA137DDC10174738807DD87 /* LiquidGlassTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90C4942FCDCE7BA2887C829A /* LiquidGlassTabBar.swift */; };
+		431B348146F6153B8D328E91 /* PersistedTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2F7E3BA46CBFE04CA0A92D /* PersistedTab.swift */; };
+		570C2F179E1D3237D5566647 /* TabBubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6DDF3950FD48E767BF27175 /* TabBubble.swift */; };
+		5AE31ABCC791B62288ED04F5 /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A3E2A64FA9B3B72703629BB /* ThemeManager.swift */; };
+		70A49F4997645686B962E0D2 /* SelectionHandleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 297EA9CE961BFF920036934A /* SelectionHandleView.swift */; };
+		733936A7CBE2B60407C98651 /* WebTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA0CB3F10DB4D7B7DAD14D9E /* WebTab.swift */; };
+		7BFB27A8AEC758530B629ADA /* SSHConnectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 023CB6A418E69A8A30B29261 /* SSHConnectionTests.swift */; };
+		7FFBEF967315C68C68D6248E /* WebTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28503FD938162D88F8B6A69F /* WebTabView.swift */; };
+		80724EA1EC07D3EC2C46051C /* SessionPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A3663E616FC97D48E5888C /* SessionPickerView.swift */; };
+		80EDB74F6E178CE8B64DDA99 /* Themes in Resources */ = {isa = PBXBuildFile; fileRef = ABF7282BEC77B8743E5A14F7 /* Themes */; };
+		85A5D1B86EBFEF5CC1A4C478 /* ThemePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF1104A268D6275CA1C3278 /* ThemePickerView.swift */; };
+		870F343B2F231F51002BB6F1 /* RtachClient in Frameworks */ = {isa = PBXBuildFile; productRef = C8000003 /* RtachClient */; };
+		870F343C2F231F51002BB6F1 /* FluidAudio in Frameworks */ = {isa = PBXBuildFile; productRef = C8000004 /* FluidAudio */; };
+		876C56362EFB1A6E00B28BC1 /* NIOCore in Frameworks */ = {isa = PBXBuildFile; productRef = C8000000 /* NIOCore */; };
+		876C56372EFB1A6E00B28BC1 /* NIOPosix in Frameworks */ = {isa = PBXBuildFile; productRef = C8000001 /* NIOPosix */; };
+		876C56382EFB1A6E00B28BC1 /* NIOSSH in Frameworks */ = {isa = PBXBuildFile; productRef = C8000002 /* NIOSSH */; };
+		8D50D6A34930F5200F1440E2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7856CABCC7D9170DD7EF307F /* Foundation.framework */; };
+		8E8B63B583F4D2BF2E6F18FD /* PortScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B132CCB8899C9B9D34FDA68 /* PortScanner.swift */; };
+		8EE9D92CA010B003B254D7CA /* PortForwardingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94FD4C0609201D6B2B27B36C /* PortForwardingManager.swift */; };
+		ADA5806394E7136002E7FE76 /* ServerPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CD476298B71607D9BDB445C /* ServerPickerView.swift */; };
+		B5D69205D0E4B34BFD5D6F2A /* SSHKeyStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E4F41052A28ACE836DF03B /* SSHKeyStore.swift */; };
+		C0000001 /* ClaunttyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000001 /* ClaunttyApp.swift */; };
+		C0000002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000002 /* ContentView.swift */; };
+		C0000003 /* SavedConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000003 /* SavedConnection.swift */; };
+		C0000004 /* ConnectionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000004 /* ConnectionStore.swift */; };
+		C0000005 /* KeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000005 /* KeychainHelper.swift */; };
+		C0000006 /* ConnectionListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000006 /* ConnectionListView.swift */; };
+		C0000007 /* NewConnectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000007 /* NewConnectionView.swift */; };
+		C0000008 /* TerminalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000008 /* TerminalView.swift */; };
+		C0000009 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C1000009 /* Assets.xcassets */; };
+		C0000010 /* GhosttyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000010 /* GhosttyApp.swift */; };
+		C0000011 /* GhosttyBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000011 /* GhosttyBridge.swift */; };
+		C0000012 /* TerminalSurface.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000012 /* TerminalSurface.swift */; };
+		C0000013 /* SSHConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000013 /* SSHConnection.swift */; };
+		C0000014 /* SSHAuthenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000014 /* SSHAuthenticator.swift */; };
+		C0000015 /* KeyboardAccessoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000015 /* KeyboardAccessoryView.swift */; };
+		C0000016 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000016 /* Session.swift */; };
+		C0000017 /* SessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000017 /* SessionManager.swift */; };
+		C0000018 /* SessionTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000018 /* SessionTabBar.swift */; };
+		C0000019 /* RtachDeployer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000019 /* RtachDeployer.swift */; };
+		C0000020 /* GhosttyKit.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1000020 /* GhosttyKit.xcframework */; };
+		C0000022 /* rtach in Resources */ = {isa = PBXBuildFile; fileRef = C1000022 /* rtach */; };
+		C0000023 /* WordList.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000023 /* WordList.swift */; };
+		C0000024 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000024 /* NotificationManager.swift */; };
+		C0000025 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000025 /* SettingsView.swift */; };
+		C0000026 /* PowerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000026 /* PowerManager.swift */; };
+		C0000027 /* SpeechManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000027 /* SpeechManager.swift */; };
+		C0000028 /* PortsSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000028 /* PortsSheetView.swift */; };
+		C0000029 /* PersistedWebTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1000029 /* PersistedWebTab.swift */; };
+		C80A313220D32B0F645D406F /* LiquidGlassTabBarRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCA3DCC2DFC28098F2BC7C70 /* LiquidGlassTabBarRepresentable.swift */; };
+		CC4B62670E3311459A29FF4C /* SSHKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = F66C88A0644682800154EE25 /* SSHKey.swift */; };
+		D1000001 /* GhosttyAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2000001 /* GhosttyAppTests.swift */; };
+		D1000002 /* TerminalSurfaceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2000002 /* TerminalSurfaceTests.swift */; };
+		D1000003 /* KeyboardAccessoryViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2000003 /* KeyboardAccessoryViewTests.swift */; };
+		D1000004 /* SessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2000004 /* SessionTests.swift */; };
+		D1000005 /* SessionManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2000005 /* SessionManagerTests.swift */; };
+		E1000001 /* SSHConnectionUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2000001 /* SSHConnectionUITests.swift */; };
+		EE2DD46DA05C44309BB94180 /* FullTabSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66B1CA5D0C2290DD8C5A6A5B /* FullTabSelector.swift */; };
+		F9C5C4A2CF04EB4C6A929250 /* ExpandedTabOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 620BF993225325AE2636ED6D /* ExpandedTabOverlay.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		657335229B112DD454B8C404 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C6000000 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C4000000;
+			remoteInfo = Clauntty;
+		};
+		E3000001 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C6000000 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C4000000;
+			remoteInfo = Clauntty;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		023CB6A418E69A8A30B29261 /* SSHConnectionTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SSHConnectionTests.swift; path = ../Tests/ClaunttyTests/SSHConnectionTests.swift; sourceTree = "<group>"; };
+		0CD476298B71607D9BDB445C /* ServerPickerView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ServerPickerView.swift; sourceTree = "<group>"; };
+		28503FD938162D88F8B6A69F /* WebTabView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WebTabView.swift; sourceTree = "<group>"; };
+		297EA9CE961BFF920036934A /* SelectionHandleView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SelectionHandleView.swift; sourceTree = "<group>"; };
+		2A3E2A64FA9B3B72703629BB /* ThemeManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
+		2B132CCB8899C9B9D34FDA68 /* PortScanner.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PortScanner.swift; sourceTree = "<group>"; };
+		55E4F41052A28ACE836DF03B /* SSHKeyStore.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SSHKeyStore.swift; sourceTree = "<group>"; };
+		59A3663E616FC97D48E5888C /* SessionPickerView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SessionPickerView.swift; sourceTree = "<group>"; };
+		620BF993225325AE2636ED6D /* ExpandedTabOverlay.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ExpandedTabOverlay.swift; sourceTree = "<group>"; };
+		66B1CA5D0C2290DD8C5A6A5B /* FullTabSelector.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FullTabSelector.swift; sourceTree = "<group>"; };
+		7856CABCC7D9170DD7EF307F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		7CF1104A268D6275CA1C3278 /* ThemePickerView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ThemePickerView.swift; sourceTree = "<group>"; };
+		82281A22E5E692A251B06D6B /* ClaunttyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ClaunttyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		8B06CB21407D10878E71D108 /* SSHKeyImportSheet.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SSHKeyImportSheet.swift; sourceTree = "<group>"; };
+		90C4942FCDCE7BA2887C829A /* LiquidGlassTabBar.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LiquidGlassTabBar.swift; sourceTree = "<group>"; };
+		94FD4C0609201D6B2B27B36C /* PortForwardingManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PortForwardingManager.swift; sourceTree = "<group>"; };
+		A94312DEE2648E8104E3AE53 /* GhosttyBridgeTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = GhosttyBridgeTests.swift; path = ../Tests/ClaunttyTests/GhosttyBridgeTests.swift; sourceTree = "<group>"; };
+		ABF7282BEC77B8743E5A14F7 /* Themes */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = folder; path = Themes; sourceTree = "<group>"; };
+		B6DDF3950FD48E767BF27175 /* TabBubble.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TabBubble.swift; sourceTree = "<group>"; };
+		BA0CB3F10DB4D7B7DAD14D9E /* WebTab.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WebTab.swift; sourceTree = "<group>"; };
+		BCA3DCC2DFC28098F2BC7C70 /* LiquidGlassTabBarRepresentable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LiquidGlassTabBarRepresentable.swift; sourceTree = "<group>"; };
+		C1000000 /* Clauntty.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Clauntty.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C1000001 /* ClaunttyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClaunttyApp.swift; sourceTree = "<group>"; };
+		C1000002 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		C1000003 /* SavedConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedConnection.swift; sourceTree = "<group>"; };
+		C1000004 /* ConnectionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionStore.swift; sourceTree = "<group>"; };
+		C1000005 /* KeychainHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainHelper.swift; sourceTree = "<group>"; };
+		C1000006 /* ConnectionListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionListView.swift; sourceTree = "<group>"; };
+		C1000007 /* NewConnectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewConnectionView.swift; sourceTree = "<group>"; };
+		C1000008 /* TerminalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TerminalView.swift; sourceTree = "<group>"; };
+		C1000009 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		C1000010 /* GhosttyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GhosttyApp.swift; sourceTree = "<group>"; };
+		C1000011 /* GhosttyBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GhosttyBridge.swift; sourceTree = "<group>"; };
+		C1000012 /* TerminalSurface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TerminalSurface.swift; sourceTree = "<group>"; };
+		C1000013 /* SSHConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSHConnection.swift; sourceTree = "<group>"; };
+		C1000014 /* SSHAuthenticator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSHAuthenticator.swift; sourceTree = "<group>"; };
+		C1000015 /* KeyboardAccessoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardAccessoryView.swift; sourceTree = "<group>"; };
+		C1000016 /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
+		C1000017 /* SessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionManager.swift; sourceTree = "<group>"; };
+		C1000018 /* SessionTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionTabBar.swift; sourceTree = "<group>"; };
+		C1000019 /* RtachDeployer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RtachDeployer.swift; sourceTree = "<group>"; };
+		C1000020 /* GhosttyKit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = GhosttyKit.xcframework; sourceTree = "<group>"; };
+		C1000022 /* rtach */ = {isa = PBXFileReference; lastKnownFileType = folder; path = rtach; sourceTree = "<group>"; };
+		C1000023 /* WordList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordList.swift; sourceTree = "<group>"; };
+		C1000024 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
+		C1000025 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		C1000026 /* PowerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PowerManager.swift; sourceTree = "<group>"; };
+		C1000027 /* SpeechManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechManager.swift; sourceTree = "<group>"; };
+		C1000028 /* PortsSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortsSheetView.swift; sourceTree = "<group>"; };
+		C1000029 /* PersistedWebTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistedWebTab.swift; sourceTree = "<group>"; };
+		CB2F7E3BA46CBFE04CA0A92D /* PersistedTab.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PersistedTab.swift; sourceTree = "<group>"; };
+		D2000001 /* GhosttyAppTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = GhosttyAppTests.swift; path = ../Tests/ClaunttyTests/GhosttyAppTests.swift; sourceTree = "<group>"; };
+		D2000002 /* TerminalSurfaceTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = TerminalSurfaceTests.swift; path = ../Tests/ClaunttyTests/TerminalSurfaceTests.swift; sourceTree = "<group>"; };
+		D2000003 /* KeyboardAccessoryViewTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = KeyboardAccessoryViewTests.swift; path = ../Tests/ClaunttyTests/KeyboardAccessoryViewTests.swift; sourceTree = "<group>"; };
+		D2000004 /* SessionTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SessionTests.swift; path = ../Tests/ClaunttyTests/SessionTests.swift; sourceTree = "<group>"; };
+		D2000005 /* SessionManagerTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SessionManagerTests.swift; path = ../Tests/ClaunttyTests/SessionManagerTests.swift; sourceTree = "<group>"; };
+		E2000001 /* SSHConnectionUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSHConnectionUITests.swift; sourceTree = "<group>"; };
+		E2000002 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E2000003 /* ClaunttyUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ClaunttyUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F66C88A0644682800154EE25 /* SSHKey.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SSHKey.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		80FD28A94163F02E770CF2EA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D50D6A34930F5200F1440E2 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C2000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				870F343C2F231F51002BB6F1 /* FluidAudio in Frameworks */,
+				870F343B2F231F51002BB6F1 /* RtachClient in Frameworks */,
+				876C56382EFB1A6E00B28BC1 /* NIOSSH in Frameworks */,
+				876C56372EFB1A6E00B28BC1 /* NIOPosix in Frameworks */,
+				876C56362EFB1A6E00B28BC1 /* NIOCore in Frameworks */,
+				C0000020 /* GhosttyKit.xcframework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E4000002 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		9288A4E4FA9722C67B531048 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				7856CABCC7D9170DD7EF307F /* Foundation.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
+		A84AE8FF78CCA176F9D311DF /* ClaunttyTests */ = {
+			isa = PBXGroup;
+			children = (
+				A94312DEE2648E8104E3AE53 /* GhosttyBridgeTests.swift */,
+				023CB6A418E69A8A30B29261 /* SSHConnectionTests.swift */,
+				D2000001 /* GhosttyAppTests.swift */,
+				D2000002 /* TerminalSurfaceTests.swift */,
+				D2000003 /* KeyboardAccessoryViewTests.swift */,
+				D2000004 /* SessionTests.swift */,
+				D2000005 /* SessionManagerTests.swift */,
+			);
+			path = ClaunttyTests;
+			sourceTree = "<group>";
+		};
+		B2C48404F3C2AD63C8301557 /* Theme */ = {
+			isa = PBXGroup;
+			children = (
+				2A3E2A64FA9B3B72703629BB /* ThemeManager.swift */,
+			);
+			path = Theme;
+			sourceTree = "<group>";
+		};
+		C3000000 = {
+			isa = PBXGroup;
+			children = (
+				C3000001 /* Clauntty */,
+				C3000010 /* Frameworks */,
+				C3000011 /* Products */,
+				A84AE8FF78CCA176F9D311DF /* ClaunttyTests */,
+				E3000010 /* ClaunttyUITests */,
+			);
+			sourceTree = "<group>";
+		};
+		C3000001 /* Clauntty */ = {
+			isa = PBXGroup;
+			children = (
+				C1000001 /* ClaunttyApp.swift */,
+				C1000002 /* ContentView.swift */,
+				C3000002 /* Core */,
+				C3000006 /* Views */,
+				C3000007 /* Models */,
+				C3000008 /* Resources */,
+			);
+			path = Clauntty;
+			sourceTree = "<group>";
+		};
+		C3000002 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				C3000003 /* SSH */,
+				C3000004 /* Terminal */,
+				C3000005 /* Storage */,
+				C3000009 /* Session */,
+				C3000030 /* Notifications */,
+				C3000031 /* Power */,
+				C3000032 /* Speech */,
+				B2C48404F3C2AD63C8301557 /* Theme */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		C3000003 /* SSH */ = {
+			isa = PBXGroup;
+			children = (
+				C1000013 /* SSHConnection.swift */,
+				C1000014 /* SSHAuthenticator.swift */,
+				C1000019 /* RtachDeployer.swift */,
+				2B132CCB8899C9B9D34FDA68 /* PortScanner.swift */,
+				94FD4C0609201D6B2B27B36C /* PortForwardingManager.swift */,
+			);
+			path = SSH;
+			sourceTree = "<group>";
+		};
+		C3000004 /* Terminal */ = {
+			isa = PBXGroup;
+			children = (
+				C1000010 /* GhosttyApp.swift */,
+				C1000011 /* GhosttyBridge.swift */,
+				C1000012 /* TerminalSurface.swift */,
+			);
+			path = Terminal;
+			sourceTree = "<group>";
+		};
+		C3000005 /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+				C1000004 /* ConnectionStore.swift */,
+				C1000005 /* KeychainHelper.swift */,
+				55E4F41052A28ACE836DF03B /* SSHKeyStore.swift */,
+			);
+			path = Storage;
+			sourceTree = "<group>";
+		};
+		C3000006 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				C1000006 /* ConnectionListView.swift */,
+				C1000007 /* NewConnectionView.swift */,
+				C1000008 /* TerminalView.swift */,
+				C1000015 /* KeyboardAccessoryView.swift */,
+				C1000018 /* SessionTabBar.swift */,
+				59A3663E616FC97D48E5888C /* SessionPickerView.swift */,
+				28503FD938162D88F8B6A69F /* WebTabView.swift */,
+				C1000025 /* SettingsView.swift */,
+				C1000028 /* PortsSheetView.swift */,
+				297EA9CE961BFF920036934A /* SelectionHandleView.swift */,
+				DFCD20EE71377F3F8FBB4C5E /* LiquidGlassTabBar */,
+				0CD476298B71607D9BDB445C /* ServerPickerView.swift */,
+				8B06CB21407D10878E71D108 /* SSHKeyImportSheet.swift */,
+				7CF1104A268D6275CA1C3278 /* ThemePickerView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		C3000007 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				C1000003 /* SavedConnection.swift */,
+				F66C88A0644682800154EE25 /* SSHKey.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		C3000008 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				C1000009 /* Assets.xcassets */,
+				C1000022 /* rtach */,
+				ABF7282BEC77B8743E5A14F7 /* Themes */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		C3000009 /* Session */ = {
+			isa = PBXGroup;
+			children = (
+				C1000016 /* Session.swift */,
+				C1000017 /* SessionManager.swift */,
+				C1000023 /* WordList.swift */,
+				BA0CB3F10DB4D7B7DAD14D9E /* WebTab.swift */,
+				CB2F7E3BA46CBFE04CA0A92D /* PersistedTab.swift */,
+				C1000029 /* PersistedWebTab.swift */,
+			);
+			path = Session;
+			sourceTree = "<group>";
+		};
+		C3000010 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C1000020 /* GhosttyKit.xcframework */,
+				9288A4E4FA9722C67B531048 /* iOS */,
+			);
+			path = Frameworks;
+			sourceTree = "<group>";
+		};
+		C3000011 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C1000000 /* Clauntty.app */,
+				82281A22E5E692A251B06D6B /* ClaunttyTests.xctest */,
+				E2000003 /* ClaunttyUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C3000030 /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				C1000024 /* NotificationManager.swift */,
+			);
+			path = Notifications;
+			sourceTree = "<group>";
+		};
+		C3000031 /* Power */ = {
+			isa = PBXGroup;
+			children = (
+				C1000026 /* PowerManager.swift */,
+			);
+			path = Power;
+			sourceTree = "<group>";
+		};
+		C3000032 /* Speech */ = {
+			isa = PBXGroup;
+			children = (
+				C1000027 /* SpeechManager.swift */,
+			);
+			path = Speech;
+			sourceTree = "<group>";
+		};
+		DFCD20EE71377F3F8FBB4C5E /* LiquidGlassTabBar */ = {
+			isa = PBXGroup;
+			children = (
+				B6DDF3950FD48E767BF27175 /* TabBubble.swift */,
+				90C4942FCDCE7BA2887C829A /* LiquidGlassTabBar.swift */,
+				620BF993225325AE2636ED6D /* ExpandedTabOverlay.swift */,
+				66B1CA5D0C2290DD8C5A6A5B /* FullTabSelector.swift */,
+				BCA3DCC2DFC28098F2BC7C70 /* LiquidGlassTabBarRepresentable.swift */,
+			);
+			path = LiquidGlassTabBar;
+			sourceTree = "<group>";
+		};
+		E3000010 /* ClaunttyUITests */ = {
+			isa = PBXGroup;
+			children = (
+				E2000001 /* SSHConnectionUITests.swift */,
+				E2000002 /* Info.plist */,
+			);
+			path = ClaunttyUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		C4000000 /* Clauntty */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C5000002 /* Build configuration list for PBXNativeTarget "Clauntty" */;
+			buildPhases = (
+				C4000001 /* Sources */,
+				C2000001 /* Frameworks */,
+				C4000002 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Clauntty;
+			packageProductDependencies = (
+				C8000000 /* NIOCore */,
+				C8000001 /* NIOPosix */,
+				C8000002 /* NIOSSH */,
+				C8000003 /* RtachClient */,
+				C8000004 /* FluidAudio */,
+			);
+			productName = Clauntty;
+			productReference = C1000000 /* Clauntty.app */;
+			productType = "com.apple.product-type.application";
+		};
+		E4000000 /* ClaunttyUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E5000002 /* Build configuration list for PBXNativeTarget "ClaunttyUITests" */;
+			buildPhases = (
+				E4000001 /* Sources */,
+				E4000002 /* Frameworks */,
+				E4000003 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E4000004 /* PBXTargetDependency */,
+			);
+			name = ClaunttyUITests;
+			productName = ClaunttyUITests;
+			productReference = E2000003 /* ClaunttyUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		F89F13520E55AD53582AEAF8 /* ClaunttyTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D0DA34F2E5592F4C621A1D90 /* Build configuration list for PBXNativeTarget "ClaunttyTests" */;
+			buildPhases = (
+				3DF9E68D60B692AF33278D58 /* Sources */,
+				80FD28A94163F02E770CF2EA /* Frameworks */,
+				B8C6E0D1AD147D4A18697E81 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C42CEF7E6CFE2956B0081106 /* PBXTargetDependency */,
+			);
+			name = ClaunttyTests;
+			productName = ClaunttyTests;
+			productReference = 82281A22E5E692A251B06D6B /* ClaunttyTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C6000000 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					C4000000 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = C5000000 /* Build configuration list for PBXProject "Clauntty" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = C3000000;
+			packageReferences = (
+				C7000000 /* XCRemoteSwiftPackageReference "swift-nio-ssh" */,
+				C7000001 /* XCRemoteSwiftPackageReference "swift-nio" */,
+				C7000002 /* XCLocalSwiftPackageReference "RtachClient" */,
+				C7000003 /* XCRemoteSwiftPackageReference "FluidAudio" */,
+			);
+			productRefGroup = C3000011 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				C4000000 /* Clauntty */,
+				F89F13520E55AD53582AEAF8 /* ClaunttyTests */,
+				E4000000 /* ClaunttyUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		B8C6E0D1AD147D4A18697E81 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C4000002 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C0000009 /* Assets.xcassets in Resources */,
+				C0000022 /* rtach in Resources */,
+				80EDB74F6E178CE8B64DDA99 /* Themes in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E4000003 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		3DF9E68D60B692AF33278D58 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1855E705517197F275A5035F /* GhosttyBridgeTests.swift in Sources */,
+				7BFB27A8AEC758530B629ADA /* SSHConnectionTests.swift in Sources */,
+				D1000001 /* GhosttyAppTests.swift in Sources */,
+				D1000002 /* TerminalSurfaceTests.swift in Sources */,
+				D1000003 /* KeyboardAccessoryViewTests.swift in Sources */,
+				D1000004 /* SessionTests.swift in Sources */,
+				D1000005 /* SessionManagerTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C4000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C0000001 /* ClaunttyApp.swift in Sources */,
+				C0000002 /* ContentView.swift in Sources */,
+				C0000003 /* SavedConnection.swift in Sources */,
+				C0000004 /* ConnectionStore.swift in Sources */,
+				C0000005 /* KeychainHelper.swift in Sources */,
+				C0000006 /* ConnectionListView.swift in Sources */,
+				C0000007 /* NewConnectionView.swift in Sources */,
+				C0000008 /* TerminalView.swift in Sources */,
+				C0000010 /* GhosttyApp.swift in Sources */,
+				C0000011 /* GhosttyBridge.swift in Sources */,
+				C0000012 /* TerminalSurface.swift in Sources */,
+				C0000013 /* SSHConnection.swift in Sources */,
+				C0000014 /* SSHAuthenticator.swift in Sources */,
+				C0000019 /* RtachDeployer.swift in Sources */,
+				C0000015 /* KeyboardAccessoryView.swift in Sources */,
+				C0000016 /* Session.swift in Sources */,
+				C0000017 /* SessionManager.swift in Sources */,
+				C0000018 /* SessionTabBar.swift in Sources */,
+				80724EA1EC07D3EC2C46051C /* SessionPickerView.swift in Sources */,
+				C0000023 /* WordList.swift in Sources */,
+				8E8B63B583F4D2BF2E6F18FD /* PortScanner.swift in Sources */,
+				8EE9D92CA010B003B254D7CA /* PortForwardingManager.swift in Sources */,
+				733936A7CBE2B60407C98651 /* WebTab.swift in Sources */,
+				7FFBEF967315C68C68D6248E /* WebTabView.swift in Sources */,
+				C0000024 /* NotificationManager.swift in Sources */,
+				C0000025 /* SettingsView.swift in Sources */,
+				C0000028 /* PortsSheetView.swift in Sources */,
+				C0000026 /* PowerManager.swift in Sources */,
+				C0000027 /* SpeechManager.swift in Sources */,
+				70A49F4997645686B962E0D2 /* SelectionHandleView.swift in Sources */,
+				570C2F179E1D3237D5566647 /* TabBubble.swift in Sources */,
+				3FA137DDC10174738807DD87 /* LiquidGlassTabBar.swift in Sources */,
+				F9C5C4A2CF04EB4C6A929250 /* ExpandedTabOverlay.swift in Sources */,
+				EE2DD46DA05C44309BB94180 /* FullTabSelector.swift in Sources */,
+				C80A313220D32B0F645D406F /* LiquidGlassTabBarRepresentable.swift in Sources */,
+				431B348146F6153B8D328E91 /* PersistedTab.swift in Sources */,
+				C0000029 /* PersistedWebTab.swift in Sources */,
+				ADA5806394E7136002E7FE76 /* ServerPickerView.swift in Sources */,
+				CC4B62670E3311459A29FF4C /* SSHKey.swift in Sources */,
+				B5D69205D0E4B34BFD5D6F2A /* SSHKeyStore.swift in Sources */,
+				06E63D06C52859FA31DA95C7 /* SSHKeyImportSheet.swift in Sources */,
+				5AE31ABCC791B62288ED04F5 /* ThemeManager.swift in Sources */,
+				85A5D1B86EBFEF5CC1A4C478 /* ThemePickerView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E4000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E1000001 /* SSHConnectionUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		C42CEF7E6CFE2956B0081106 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Clauntty;
+			target = C4000000 /* Clauntty */;
+			targetProxy = 657335229B112DD454B8C404 /* PBXContainerItemProxy */;
+		};
+		E4000004 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Clauntty;
+			target = C4000000 /* Clauntty */;
+			targetProxy = E3000001 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		715E4D3D21E4A4F64997B737 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.octerm.clauntty.tests;
+				PRODUCT_NAME = ClaunttyTests;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Clauntty.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Clauntty";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		A3C135922CDA28AC036C4A71 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.octerm.clauntty.tests;
+				PRODUCT_NAME = ClaunttyTests;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Clauntty.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Clauntty";
+			};
+			name = Debug;
+		};
+		C5000003 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		C5000004 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		C5000005 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 65533RB4LC;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Clauntty/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Clauntty;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.octerm.clauntty;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		C5000006 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 65533RB4LC;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Clauntty/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Clauntty;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.octerm.clauntty;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		E5000003 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ClaunttyUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.octerm.clauntty.uitests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Clauntty;
+			};
+			name = Debug;
+		};
+		E5000004 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ClaunttyUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.octerm.clauntty.uitests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Clauntty;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C5000000 /* Build configuration list for PBXProject "Clauntty" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C5000003 /* Debug */,
+				C5000004 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C5000002 /* Build configuration list for PBXNativeTarget "Clauntty" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C5000005 /* Debug */,
+				C5000006 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D0DA34F2E5592F4C621A1D90 /* Build configuration list for PBXNativeTarget "ClaunttyTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				715E4D3D21E4A4F64997B737 /* Release */,
+				A3C135922CDA28AC036C4A71 /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E5000002 /* Build configuration list for PBXNativeTarget "ClaunttyUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E5000003 /* Debug */,
+				E5000004 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		C7000002 /* XCLocalSwiftPackageReference "RtachClient" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = RtachClient;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		C7000000 /* XCRemoteSwiftPackageReference "swift-nio-ssh" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-nio-ssh.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.9.0;
+			};
+		};
+		C7000001 /* XCRemoteSwiftPackageReference "swift-nio" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-nio.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.62.0;
+			};
+		};
+		C7000003 /* XCRemoteSwiftPackageReference "FluidAudio" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/FluidInference/FluidAudio.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.7.9;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		C8000000 /* NIOCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C7000001 /* XCRemoteSwiftPackageReference "swift-nio" */;
+			productName = NIOCore;
+		};
+		C8000001 /* NIOPosix */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C7000001 /* XCRemoteSwiftPackageReference "swift-nio" */;
+			productName = NIOPosix;
+		};
+		C8000002 /* NIOSSH */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C7000000 /* XCRemoteSwiftPackageReference "swift-nio-ssh" */;
+			productName = NIOSSH;
+		};
+		C8000003 /* RtachClient */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = RtachClient;
+		};
+		C8000004 /* FluidAudio */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C7000003 /* XCRemoteSwiftPackageReference "FluidAudio" */;
+			productName = FluidAudio;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = C6000000 /* Project object */;
+}

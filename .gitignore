@@ -1,0 +1,29 @@
+# Xcode
+build/
+DerivedData/
+*.xcuserstate
+*.xcscmblueprint
+xcuserdata/
+
+# Swift Package Manager
+.build/
+.swiftpm/
+Package.resolved
+
+# macOS
+.DS_Store
+*.swp
+*~
+
+# Secrets (just in case)
+*.pem
+*.key
+.env*
+credentials*
+secrets*
+
+# Test artifacts
+screenshots/
+
+# IDB temp files
+/tmp/idb_companion.log

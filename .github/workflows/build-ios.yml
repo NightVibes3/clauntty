@@ -1,0 +1,99 @@
+name: Build iOS IPA
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - name: Check out clauntty
+        uses: actions/checkout@v4
+
+      - name: Check Xcode version
+        run: xcodebuild -version
+
+      - name: Install Zig
+        run: |
+          brew install zig
+          zig version
+
+      - name: Clone dependencies
+        run: |
+          # Use HOME for writable space
+          BUILD_DIR="$HOME/clauntty-build"
+          mkdir -p "$BUILD_DIR"
+          cd "$BUILD_DIR"
+          
+          echo "=== Copying clauntty to build dir ==="
+          cp -R "$GITHUB_WORKSPACE" "$BUILD_DIR/clauntty"
+          ls -la "$BUILD_DIR/clauntty"
+          
+          echo "=== Cloning dependencies ==="
+          git clone https://github.com/eriklangille/rtach.git
+          git clone -b clauntty https://github.com/eriklangille/ghostty.git
+          git clone https://github.com/mitchellh/libxev.git
+          
+          echo "=== Final structure ==="
+          ls -la "$BUILD_DIR"
+
+      - name: Build rtach
+        run: |
+          cd "$HOME/clauntty-build/rtach"
+          zig build cross || echo "rtach build had issues"
+
+      - name: Build Ghostty framework
+        run: |
+          cd "$HOME/clauntty-build/ghostty"
+          zig build -Demit-xcframework -Doptimize=ReleaseFast
+          ls -la "$HOME/clauntty-build/ghostty/zig-out/"
+
+      - name: Setup Frameworks
+        run: |
+          cd "$HOME/clauntty-build/clauntty"
+          
+          rm -rf Frameworks/GhosttyKit.xcframework
+          mkdir -p Frameworks
+          cp -R "$HOME/clauntty-build/ghostty/zig-out/GhosttyKit.xcframework" Frameworks/
+          ls -la Frameworks/
+
+      - name: Copy rtach binaries
+        run: |
+          if [ -d "$HOME/clauntty-build/rtach/zig-out/bin" ]; then
+            mkdir -p "$HOME/clauntty-build/clauntty/Clauntty/Resources/rtach"
+            cp "$HOME/clauntty-build/rtach/zig-out/bin"/* "$HOME/clauntty-build/clauntty/Clauntty/Resources/rtach/" || true
+          fi
+
+      - name: Build and Package IPA
+        run: |
+          cd "$HOME/clauntty-build/clauntty"
+          
+          # Build
+          xcodebuild -project Clauntty.xcodeproj \
+            -scheme Clauntty \
+            -sdk iphoneos \
+            -configuration Release \
+            -destination 'generic/platform=iOS' \
+            -archivePath build/App.xcarchive \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
+            clean archive
+          
+          # Package
+          mkdir -p build/Payload
+          cp -r build/App.xcarchive/Products/Applications/Clauntty.app build/Payload/
+          cd build && zip -r Clauntty.ipa Payload
+          
+          # Copy to workspace for upload
+          mkdir -p "$GITHUB_WORKSPACE/build"
+          cp Clauntty.ipa "$GITHUB_WORKSPACE/build/"
+
+      - name: Upload IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: Clauntty-IPA
+          path: ${{ github.workspace }}/build/Clauntty.ipa
+          retention-days: 7

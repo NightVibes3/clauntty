@@ -1,0 +1,104 @@
+workflows:
+  ios-build:
+    name: iOS Build with Ghostty
+    instance_type: mac_mini_m2
+    max_build_duration: 120
+    environment:
+      xcode: latest
+    scripts:
+      - name: Build IPA
+        script: |
+          set -e
+          
+          # Use HOME directory for writable space
+          BUILD_DIR="$HOME/clauntty-build"
+          mkdir -p "$BUILD_DIR"
+          
+          echo "=== Step 1: Setup directory structure ==="
+          echo "CM_CLONE_DIR: $CM_CLONE_DIR"
+          echo "BUILD_DIR: $BUILD_DIR"
+          
+          cd "$BUILD_DIR"
+          
+          echo "=== Step 2: Clone dependencies ==="
+          git clone https://github.com/eriklangille/rtach.git
+          git clone -b clauntty https://github.com/eriklangille/ghostty.git
+          git clone https://github.com/mitchellh/libxev.git
+          
+          echo "=== Directory contents ==="
+          ls -la
+          
+          echo ""
+          echo "=== Step 3: Copy clauntty repo ==="
+          # Copy the current repo to build directory
+          cp -R "$CM_CLONE_DIR" "$BUILD_DIR/clauntty"
+          ls -la "$BUILD_DIR/clauntty"
+          
+          echo ""
+          echo "=== Step 4: Install Zig ==="
+          brew install zig 2>/dev/null || true
+          
+          echo ""
+          echo "=== Step 5: Build rtach ==="
+          cd "$BUILD_DIR/rtach"
+          zig build cross || echo "rtach build had issues, continuing"
+          
+          echo ""
+          echo "=== Step 6: Build Ghostty framework ==="
+          cd "$BUILD_DIR/ghostty"
+          zig build -Demit-xcframework -Doptimize=ReleaseFast
+          
+          echo "=== Ghostty output ==="
+          ls -la "$BUILD_DIR/ghostty/zig-out/"
+          
+          echo ""
+          echo "=== Step 7: Setup Frameworks ==="
+          cd "$BUILD_DIR/clauntty"
+          rm -rf Frameworks/GhosttyKit.xcframework
+          mkdir -p Frameworks
+          cp -R "$BUILD_DIR/ghostty/zig-out/GhosttyKit.xcframework" Frameworks/
+          ls -la Frameworks/
+          
+          echo ""
+          echo "=== Step 8: Copy rtach binaries ==="
+          if [ -d "$BUILD_DIR/rtach/zig-out/bin" ]; then
+            mkdir -p Clauntty/Resources/rtach
+            cp "$BUILD_DIR/rtach/zig-out/bin"/* Clauntty/Resources/rtach/ 2>/dev/null || true
+            echo "rtach binaries copied"
+          fi
+          
+          echo ""
+          echo "=== Step 9: Build IPA ==="
+          cd "$BUILD_DIR/clauntty"
+          xcodebuild -project Clauntty.xcodeproj \
+            -scheme Clauntty \
+            -sdk iphoneos \
+            -configuration Release \
+            -destination 'generic/platform=iOS' \
+            -archivePath build/App.xcarchive \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
+            clean archive
+          
+          echo ""
+          echo "=== Step 10: Package IPA ==="
+          mkdir -p build/Payload
+          cp -r build/App.xcarchive/Products/Applications/Clauntty.app build/Payload/
+          cd build && zip -r Clauntty.ipa Payload
+          
+          # Copy back to CM_CLONE_DIR for artifact pickup
+          mkdir -p "$CM_CLONE_DIR/build"
+          cp Clauntty.ipa "$CM_CLONE_DIR/build/"
+          
+          echo ""
+          echo "✅ Build complete!"
+          ls -la "$CM_CLONE_DIR/build/Clauntty.ipa"
+
+    artifacts:
+      - build/*.ipa
+    
+    publishing:
+      email:
+        recipients:
+          - bobbytatum12@gmail.com
