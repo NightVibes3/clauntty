@@ -15,6 +15,11 @@ workflows:
           # Use HOME directory for writable space
           BUILD_DIR="$HOME/clauntty-build"
           
+          echo "=== Step 0: Ensure Metal Toolchain ==="
+          xcode-select -p
+          # Ensure Metal toolchain is present (needed for Xcode 16+)
+          xcrun -find metal || xcodebuild -downloadComponent MetalToolchain || echo "Warning: Metal toolchain download failed, build might fail."
+          
           echo "=== Step 1: Setup directory structure ==="
           echo "SOURCE_DIR: $SOURCE_DIR"
           echo "BUILD_DIR: $BUILD_DIR"
