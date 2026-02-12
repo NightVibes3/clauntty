@@ -13,10 +13,20 @@ jobs:
         run: |
           sudo xcode-select -s /Applications/Xcode_16.app || sudo xcode-select -s /Applications/Xcode.app
           xcodebuild -version
-      - name: Install iOS 18 Platform
+          xcodebuild -showsdks
+      - name: Install iOS 26 Beta SDK
         run: |
+          echo "=== Checking available platforms ==="
           xcrun simctl list runtimes
-          xcodebuild -downloadPlatform iOS || echo "iOS platform download done"
+          echo "=== Trying to download iOS 26 platform ==="
+          xcodebuild -downloadPlatform iOS -version 26.0 || echo "iOS 26 download failed"
+          echo "=== Checking what iOS platforms are available ==="
+          xcodebuild -showsdks | grep -i ios || true
+          echo "=== Running xcodebuild -runFirstLaunch ==="
+          sudo xcodebuild -runFirstLaunch || true
+          echo "=== Checking SDKs in Xcode ==="
+          ls -la /Applications/Xcode_16.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/ 2>/dev/null || true
+          ls -la /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/ 2>/dev/null || true
       - name: Setup Zig 0.15.2
         run: |
           # Correct URL: zig-aarch64-macos-0.15.2.tar.xz (not zig-macos-aarch64)
