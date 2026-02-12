@@ -15,10 +15,16 @@ jobs:
       - name: Check Xcode version
         run: xcodebuild -version
 
-      - name: Install Zig
+      - name: Setup Zig
+        uses: mlugg/setup-zig@v1
+        with:
+          version: master # Ghostty requires 0.15.2+ which is currently master
+
+      - name: Build rtach
         run: |
-          brew install zig
-          zig version
+          cd "$HOME/clauntty-build/rtach"
+          # The hash might already be correct, but let's ensure it is
+          zig fetch https://github.com/allyourcodebase/zlib/archive/refs/heads/main.tar.gz || true
 
       - name: Clone dependencies
         run: |
@@ -52,6 +58,13 @@ jobs:
           "
           zig build cross
 
+      - name: Initialize Xcode
+        run: |
+          xcodebuild -version
+          xcode-select -p
+          sudo xcodebuild -runFirstLaunch
+          xcodebuild -downloadComponent MetalToolchain || true
+
       - name: Build Ghostty framework
         run: |
           cd "$HOME/clauntty-build/ghostty"
@@ -63,7 +76,14 @@ jobs:
           open('build.zig.zon', 'w').write(content)
           "
           zig build -Demit-xcframework -Doptimize=ReleaseFast -Demit-macos-app=false
-          ls -la "$HOME/clauntty-build/ghostty/zig-out/"
+          
+          echo "=== Verifying GhosttyKit.xcframework ==="
+          if [ -d "macos/GhosttyKit.xcframework" ]; then
+            ls -R macos/GhosttyKit.xcframework
+          else
+            echo "ERROR: GhosttyKit.xcframework not found in macos/"
+            exit 1
+          fi
 
       - name: Setup Frameworks
         run: |
@@ -72,25 +92,38 @@ jobs:
           rm -rf Frameworks/GhosttyKit.xcframework
           mkdir -p Frameworks
           cp -R "$HOME/clauntty-build/ghostty/macos/GhosttyKit.xcframework" Frameworks/
-          ls -la Frameworks/
-
+          
+          echo "=== Verifying link path ==="
+          ls -la Frameworks/GhosttyKit.xcframework
+          
       - name: Copy rtach binaries
         run: |
+          cd "$HOME/clauntty-build/clauntty"
           if [ -d "$HOME/clauntty-build/rtach/zig-out/bin" ]; then
-            mkdir -p "$HOME/clauntty-build/clauntty/Clauntty/Resources/rtach"
-            cp "$HOME/clauntty-build/rtach/zig-out/bin"/* "$HOME/clauntty-build/clauntty/Clauntty/Resources/rtach/" || true
+            mkdir -p Clauntty/Resources/rtach
+            cp "$HOME/clauntty-build/rtach/zig-out/bin"/* Clauntty/Resources/rtach/ || true
           fi
+          echo "=== Verifying rtach binaries ==="
+          ls -R Clauntty/Resources/rtach
 
       - name: Build and Package IPA
         run: |
           cd "$HOME/clauntty-build/clauntty"
+          
+          # Project file adjustments from user advice
+          # Using placeholders - user can change these or we can automate if provided
+          sed -i "" "s/65533RB4LC/${{ secrets.DEVELOPER_ID || '65533RB4LC' }}/g" Clauntty.xcodeproj/project.pbxproj
+          sed -i "" "s/com.octerm.clauntty/${{ secrets.BUNDLE_ID || 'com.octerm.clauntty' }}/g" Clauntty.xcodeproj/project.pbxproj
+
+          # Force package resolution
+          xcodebuild -resolvePackageDependencies
           
           # Build
           xcodebuild -project Clauntty.xcodeproj \
             -scheme Clauntty \
             -sdk iphoneos \
             -configuration Release \
-            -destination 'generic/platform=iOS' \
+            -destination 'generic/platform=iOS,name=Any iOS Device' \
             -archivePath build/App.xcarchive \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
@@ -99,12 +132,19 @@ jobs:
           
           # Package
           mkdir -p build/Payload
-          cp -r build/App.xcarchive/Products/Applications/Clauntty.app build/Payload/
-          cd build && zip -r Clauntty.ipa Payload
+          if [ -d "build/App.xcarchive/Products/Applications/Clauntty.app" ]; then
+            cp -r build/App.xcarchive/Products/Applications/Clauntty.app build/Payload/
+            cd build && zip -r Clauntty.ipa Payload
+          else
+            echo "ERROR: Clauntty.app not found in archive"
+            # List contents to help debug
+            ls -R build/App.xcarchive
+            exit 1
+          fi
           
           # Copy to workspace for upload
           mkdir -p "$GITHUB_WORKSPACE/build"
-          cp Clauntty.ipa "$GITHUB_WORKSPACE/build/"
+          cp build/Clauntty.ipa "$GITHUB_WORKSPACE/build/"
 
       - name: Upload IPA
         uses: actions/upload-artifact@v4

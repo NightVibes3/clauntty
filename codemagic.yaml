@@ -62,19 +62,19 @@ workflows:
           
           echo ""
           echo "=== Step 4: Install Zig ==="
-          brew install zig 2>/dev/null || true
+          # Install Zig 0.15.2-dev (master) or specific version
+          # Since brew might not have 0.15.2 yet, we download it directly
+          curl -L https://ziglang.org/builds/zig-macos-aarch64-0.15.0-dev.22+0d138c263.tar.xz -o zig.tar.xz || \
+          curl -L https://ziglang.org/download/0.13.0/zig-macos-aarch64-0.13.0.tar.xz -o zig.tar.xz
+          mkdir -p zig-dist && tar -xf zig.tar.xz -C zig-dist --strip-components 1
+          export PATH="$(pwd)/zig-dist:$PATH"
+          zig version
           
           echo ""
           echo "=== Step 5: Build rtach ==="
           cd "$BUILD_DIR/rtach"
-          # Patch zlib hash and force local libxev path
-          python3 -c "
-          import re
-          content = open('build.zig.zon').read()
-          content = content.replace('zlib-1.3.1-ZZQ7lc8NAABUbHzDe_cSWboCqMbrLkVwvFkKnojgeiT2', 'zlib-1.3.1-1-ZZQ7ldENAAA7qJjUXP6E6xnRuV-jDL9dyoJFc_eb3zQ6')
-          content = re.sub(r'\.libxev\s*=\s*\.\{.*?\},', '.libxev = .{ .path = \"../libxev\" },', content, flags=re.DOTALL)
-          open('build.zig.zon', 'w').write(content)
-          "
+          # Ensure zlib hash is correct
+          zig fetch https://github.com/allyourcodebase/zlib/archive/refs/heads/main.tar.gz || true
           zig build cross
           
           echo ""
@@ -111,11 +111,16 @@ workflows:
           echo ""
           echo "=== Step 9: Build IPA ==="
           cd "$BUILD_DIR/clauntty"
+          
+          # Project file adjustments from user advice
+          sed -i "" "s/65533RB4LC/${DEVELOPER_ID:-65533RB4LC}/g" Clauntty.xcodeproj/project.pbxproj
+          sed -i "" "s/com.octerm.clauntty/${BUNDLE_ID:-com.octerm.clauntty}/g" Clauntty.xcodeproj/project.pbxproj
+
           xcodebuild -project Clauntty.xcodeproj \
             -scheme Clauntty \
             -sdk iphoneos \
             -configuration Release \
-            -destination 'generic/platform=iOS' \
+            -destination 'generic/platform=iOS,name=Any iOS Device' \
             -archivePath build/App.xcarchive \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
@@ -125,16 +130,22 @@ workflows:
           echo ""
           echo "=== Step 10: Package IPA ==="
           mkdir -p build/Payload
-          cp -r build/App.xcarchive/Products/Applications/Clauntty.app build/Payload/
-          cd build && zip -r Clauntty.ipa Payload
+          if [ -d "build/App.xcarchive/Products/Applications/Clauntty.app" ]; then
+            cp -r build/App.xcarchive/Products/Applications/Clauntty.app build/Payload/
+            cd build && zip -r Clauntty.ipa Payload
+          else
+            echo "ERROR: Clauntty.app not found in archive"
+            ls -R build/App.xcarchive
+            exit 1
+          fi
           
-          # Copy back to CM_CLONE_DIR for artifact pickup
-          mkdir -p "$CM_CLONE_DIR/build"
-          cp Clauntty.ipa "$CM_CLONE_DIR/build/"
+          # Copy back to SOURCE_DIR for artifact pickup
+          mkdir -p "$SOURCE_DIR/build"
+          cp build/Clauntty.ipa "$SOURCE_DIR/build/"
           
           echo ""
           echo "✅ Build complete!"
-          ls -la "$CM_CLONE_DIR/build/Clauntty.ipa"
+          ls -la "$SOURCE_DIR/build/Clauntty.ipa"
 
     artifacts:
       - build/*.ipa
