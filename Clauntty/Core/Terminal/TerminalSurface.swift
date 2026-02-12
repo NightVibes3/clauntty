@@ -132,6 +132,7 @@ struct TerminalSurface: UIViewRepresentable {
 
 /// UIKit view that hosts the Ghostty terminal
 /// Uses CAMetalLayer for GPU-accelerated rendering
+@MainActor
 class TerminalSurfaceView: UIView, ObservableObject, UIKeyInput, UITextInputTraits {
 
     // MARK: - Surface Registry (for routing Ghostty callbacks)
@@ -513,8 +514,8 @@ class TerminalSurfaceView: UIView, ObservableObject, UIKeyInput, UITextInputTrai
             Logger.clauntty.verbose("[PTY_INPUT] \(inputData.count) bytes, first 50: \(hexPreview)")
             // Forward to SSH via the same callback as keyboard input
             // Must dispatch to main thread since Session is @MainActor
-            DispatchQueue.main.async {
-                view.onTextInput?(inputData)
+            DispatchQueue.main.async { [weak view] in
+                view?.onTextInput?(inputData)
             }
         }
 

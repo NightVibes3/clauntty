@@ -24,7 +24,7 @@ struct LiquidGlassTabBarRepresentable: UIViewRepresentable {
         bar.onNewTab = onNewTab
         bar.onShowTabSelector = onShowTabSelector
 
-        bar.onTabSelected = { [weak bar] tab in
+        bar.onTabSelected = { tab in
             switch tab {
             case .terminal(let session):
                 context.coordinator.sessionManager?.switchTo(session)

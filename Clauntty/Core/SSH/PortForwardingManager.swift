@@ -5,6 +5,7 @@ import NIOSSH
 import os.log
 
 /// Manages SSH port forwarding - creates a local socket that tunnels to a remote port
+@MainActor
 class PortForwardingManager {
     let localPort: Int
     let remoteHost: String

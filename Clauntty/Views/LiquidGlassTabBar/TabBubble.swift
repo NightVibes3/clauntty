@@ -113,14 +113,7 @@ class TabBubble: UIView {
 
     /// Glass effect container
     private let containerEffectView: UIVisualEffectView = {
-        let effect: UIVisualEffect
-        if #available(iOS 26.0, *) {
-            let glassEffect = UIGlassEffect()
-            glassEffect.isInteractive = true
-            effect = glassEffect
-        } else {
-            effect = UIBlurEffect(style: .systemMaterial)
-        }
+        let effect = SafeGlassEffect.create(interactive: true)
         let view = UIVisualEffectView(effect: effect)
         view.clipsToBounds = true
         return view
