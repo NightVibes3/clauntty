@@ -28,34 +28,6 @@ enum TabItem: Identifiable, Equatable {
 
 /// Safari-style liquid glass tab bar with centered active tab
 class LiquidGlassTabBar: UIView {
-    
-    private static func makePlusEffect() -> UIVisualEffect {
-        guard #available(iOS 26.0, *) else {
-            return UIBlurEffect(style: .systemMaterial)
-        }
-        return makeGlassPlusEffect()
-    }
-    
-    @available(iOS 26.0, *)
-    private static func makeGlassPlusEffect() -> UIVisualEffect {
-        let glassEffect = UIGlassEffect()
-        glassEffect.isInteractive = true
-        return glassEffect
-    }
-
-    private static func makeContainerEffect() -> UIVisualEffect {
-        guard #available(iOS 26.0, *) else {
-            return UIBlurEffect(style: .systemMaterial)
-        }
-        return makeGlassEffect()
-    }
-
-    @available(iOS 26.0, *)
-    private static func makeGlassEffect() -> UIVisualEffect {
-        let glassEffect = UIGlassEffect()
-        glassEffect.isInteractive = true
-        return glassEffect
-    }
 
     // MARK: - Callbacks
 
@@ -135,8 +107,16 @@ class LiquidGlassTabBar: UIView {
     private var bubbleViews: [UUID: TabBubble] = [:]
 
     /// Plus button
-    private lazy var plusButton: UIVisualEffectView = {
-        let view = UIVisualEffectView(effect: Self.makePlusEffect())
+    private let plusButton: UIVisualEffectView = {
+        let effect: UIVisualEffect
+        if #available(iOS 26.0, *) {
+            let glassEffect = UIGlassEffect()
+            glassEffect.isInteractive = true
+            effect = glassEffect
+        } else {
+            effect = UIBlurEffect(style: .systemMaterial)
+        }
+        let view = UIVisualEffectView(effect: effect)
         view.clipsToBounds = true
         return view
     }()

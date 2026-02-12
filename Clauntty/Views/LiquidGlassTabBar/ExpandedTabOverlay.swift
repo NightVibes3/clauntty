@@ -4,20 +4,6 @@ import UIKit
 /// Shows terminal/globe icon, title, and action buttons (close, delete, tabs)
 class ExpandedTabOverlay: UIView {
 
-    private static func makeContainerEffect() -> UIVisualEffect {
-        guard #available(iOS 26.0, *) else {
-            return UIBlurEffect(style: .systemMaterial)
-        }
-        return makeGlassEffect()
-    }
-
-    @available(iOS 26.0, *)
-    private static func makeGlassEffect() -> UIVisualEffect {
-        let glassEffect = UIGlassEffect()
-        glassEffect.isInteractive = true
-        return glassEffect
-    }
-
     // MARK: - Callbacks
 
     var onClose: (() -> Void)?
@@ -37,8 +23,16 @@ class ExpandedTabOverlay: UIView {
     // MARK: - Views
 
     /// Glass effect background
-    private lazy var containerEffectView: UIVisualEffectView = {
-        let view = UIVisualEffectView(effect: Self.makeContainerEffect())
+    private let containerEffectView: UIVisualEffectView = {
+        let effect: UIVisualEffect
+        if #available(iOS 26.0, *) {
+            let glassEffect = UIGlassEffect()
+            glassEffect.isInteractive = true
+            effect = glassEffect
+        } else {
+            effect = UIBlurEffect(style: .systemMaterial)
+        }
+        let view = UIVisualEffectView(effect: effect)
         view.clipsToBounds = true
         return view
     }()
