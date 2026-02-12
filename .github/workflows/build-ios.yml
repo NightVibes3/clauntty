@@ -13,17 +13,19 @@ jobs:
       - name: Check Xcode version
         run: xcodebuild -version
 
-      - name: Setup Zig
+      - name: Setup Zig 0.15.2
         run: |
-          # Use official Zig download index to find latest master
-          INDEX_JSON=$(curl -s https://ziglang.org/download/index.json)
-          URL=$(echo "$INDEX_JSON" | python3 -c "import sys, json; data=json.load(sys.stdin); print(data['master']['aarch64-macos']['tarball'])")
-          VERSION=$(echo "$INDEX_JSON" | python3 -c "import sys, json; data=json.load(sys.stdin); print(data['master']['version'])")
-          echo "Installing Zig $VERSION from $URL"
-          curl -L "$URL" -o zig.tar.xz
+          # Download specific Zig 0.15.2 (not master/dev version)
+          ZIG_VERSION="0.15.2"
+          ZIG_URL="https://ziglang.org/download/${ZIG_VERSION}/zig-macos-aarch64-${ZIG_VERSION}.tar.xz"
+          echo "Downloading Zig ${ZIG_VERSION} from ${ZIG_URL}"
+          curl -L "$ZIG_URL" -o zig.tar.xz
           mkdir -p "$HOME/zig"
           tar -xJf zig.tar.xz -C "$HOME/zig" --strip-components=1
           echo "$HOME/zig" >> $GITHUB_PATH
+          export PATH="$HOME/zig:$PATH"
+          echo "Zig version:"
+          zig version
 
       - name: Clone dependencies
         run: |
@@ -42,7 +44,10 @@ jobs:
 
       - name: Build Ghostty framework
         run: |
+          export PATH="$HOME/zig:$PATH"
           cd "$HOME/clauntty-build/ghostty"
+          echo "Building with Zig:"
+          zig version
           zig build -Demit-xcframework -Doptimize=ReleaseFast -Demit-macos-app=false
 
       - name: Setup Frameworks
@@ -59,7 +64,6 @@ jobs:
             -scheme Clauntty \
             -sdk iphoneos \
             -configuration Release \
-            -destination 'generic/platform=iOS' \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO \
