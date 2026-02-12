@@ -19,8 +19,8 @@ jobs:
         run: |
           # Use official Zig download index to find latest master
           INDEX_JSON=$(curl -s https://ziglang.org/download/index.json)
-          URL=$(echo "$INDEX_JSON" | python3 -c "import sys, json; print(json.load(sys.stdin)['master']['aarch64-macos']['tarball'])")
-          VERSION=$(echo "$INDEX_JSON" | python3 -c "import sys, json; print(json.load(sys.stdin)['master']['aarch64-macos']['version'])")
+          URL=$(echo "$INDEX_JSON" | python3 -c "import sys, json; data=json.load(sys.stdin); print(data['master']['aarch64-macos']['tarball'])")
+          VERSION=$(echo "$INDEX_JSON" | python3 -c "import sys, json; data=json.load(sys.stdin); print(data['master']['version'])")
           echo "Installing Zig $VERSION from $URL"
           curl -L "$URL" -o zig.tar.xz
           mkdir -p "$HOME/zig"
