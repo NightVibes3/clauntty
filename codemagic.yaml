@@ -10,13 +10,18 @@ workflows:
         script: |
           set -e
           
+          # Capture the clone directory (current directory)
+          SOURCE_DIR=$(pwd)
           # Use HOME directory for writable space
           BUILD_DIR="$HOME/clauntty-build"
-          mkdir -p "$BUILD_DIR"
           
           echo "=== Step 1: Setup directory structure ==="
-          echo "CM_CLONE_DIR: $CM_CLONE_DIR"
+          echo "SOURCE_DIR: $SOURCE_DIR"
           echo "BUILD_DIR: $BUILD_DIR"
+          
+          # Clean and recreate build directory
+          rm -rf "$BUILD_DIR"
+          mkdir -p "$BUILD_DIR"
           
           cd "$BUILD_DIR"
           
@@ -31,7 +36,7 @@ workflows:
           echo ""
           echo "=== Step 3: Copy clauntty repo ==="
           # Copy the current repo to build directory
-          cp -R "$CM_CLONE_DIR" "$BUILD_DIR/clauntty"
+          cp -R "$SOURCE_DIR" "$BUILD_DIR/clauntty"
           ls -la "$BUILD_DIR/clauntty"
           
           echo ""
