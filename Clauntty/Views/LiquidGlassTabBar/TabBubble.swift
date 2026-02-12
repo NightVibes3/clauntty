@@ -13,6 +13,20 @@ enum TabType {
 /// Expands Safari-style with two rows when tapped
 class TabBubble: UIView {
 
+    private static func makeContainerEffect() -> UIVisualEffect {
+        guard #available(iOS 26.0, *) else {
+            return UIBlurEffect(style: .systemMaterial)
+        }
+        return makeGlassEffect()
+    }
+
+    @available(iOS 26.0, *)
+    private static func makeGlassEffect() -> UIVisualEffect {
+        let glassEffect = UIGlassEffect()
+        glassEffect.isInteractive = true
+        return glassEffect
+    }
+
     // MARK: - Properties
 
     var tabId: UUID?

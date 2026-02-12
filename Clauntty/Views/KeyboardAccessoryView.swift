@@ -1224,6 +1224,20 @@ extension KeyboardAccessoryView: UIGestureRecognizerDelegate {
 /// Contains just the keyboard show button and arrow nipple
 class CollapsedKeyboardBar: UIView {
 
+    private static func makeContainerEffect() -> UIVisualEffect {
+        guard #available(iOS 26.0, *) else {
+            return UIBlurEffect(style: .systemMaterial)
+        }
+        return makeGlassEffect()
+    }
+
+    @available(iOS 26.0, *)
+    private static func makeGlassEffect() -> UIVisualEffect {
+        let glassEffect = UIGlassEffect()
+        glassEffect.isInteractive = true
+        return glassEffect
+    }
+
     /// Callback to show keyboard
     var onShowKeyboard: (() -> Void)?
 
