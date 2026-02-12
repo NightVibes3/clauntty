@@ -23,16 +23,8 @@ class ExpandedTabOverlay: UIView {
     // MARK: - Views
 
     /// Glass effect background
-    private let containerEffectView: UIVisualEffectView = {
-        let effect: UIVisualEffect
-        if #available(iOS 26.0, *) {
-            let glassEffect = UIGlassEffect()
-            glassEffect.isInteractive = true
-            effect = glassEffect
-        } else {
-            effect = UIBlurEffect(style: .systemMaterial)
-        }
-        let view = UIVisualEffectView(effect: effect)
+    private lazy var containerEffectView: UIVisualEffectView = {
+        let view = UIVisualEffectView(effect: Self.makeContainerEffect())
         view.clipsToBounds = true
         return view
     }()

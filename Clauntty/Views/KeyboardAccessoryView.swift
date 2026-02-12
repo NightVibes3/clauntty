@@ -6,6 +6,21 @@ import Combine
 /// iOS Notes-style pill shape with fixed center nipple and evenly distributed buttons
 /// Uses UIGlassEffect on iOS 26+ or UIBlurEffect fallback for native look
 class KeyboardAccessoryView: UIView {
+    
+    private static func makeContainerEffect() -> UIVisualEffect {
+        guard #available(iOS 26.0, *) else {
+            return UIBlurEffect(style: .systemMaterial)
+        }
+        return makeGlassEffect()
+    }
+    
+    @available(iOS 26.0, *)
+    private static func makeGlassEffect() -> UIVisualEffect {
+        let glassEffect = UIGlassEffect()
+        glassEffect.isInteractive = true
+        return glassEffect
+    }
+
 
     /// Callback for sending key data to the terminal
     var onKeyInput: ((Data) -> Void)?
@@ -97,16 +112,8 @@ class KeyboardAccessoryView: UIView {
     // MARK: - Views
 
     /// Main container (pill-shaped glass effect)
-    private let containerEffectView: UIVisualEffectView = {
-        let effect: UIVisualEffect
-        if #available(iOS 26.0, *) {
-            let glassEffect = UIGlassEffect()
-            glassEffect.isInteractive = true
-            effect = glassEffect
-        } else {
-            effect = UIBlurEffect(style: .systemMaterial)
-        }
-        let view = UIVisualEffectView(effect: effect)
+    private lazy var containerEffectView: UIVisualEffectView = {
+        let view = UIVisualEffectView(effect: Self.makeContainerEffect())
         view.clipsToBounds = true
         return view
     }()
@@ -1225,16 +1232,8 @@ class CollapsedKeyboardBar: UIView {
 
     // MARK: - Views
 
-    private let containerEffectView: UIVisualEffectView = {
-        let effect: UIVisualEffect
-        if #available(iOS 26.0, *) {
-            let glassEffect = UIGlassEffect()
-            glassEffect.isInteractive = true
-            effect = glassEffect
-        } else {
-            effect = UIBlurEffect(style: .systemMaterial)
-        }
-        let view = UIVisualEffectView(effect: effect)
+    private lazy var containerEffectView: UIVisualEffectView = {
+        let view = UIVisualEffectView(effect: Self.makeContainerEffect())
         view.clipsToBounds = true
         return view
     }()
