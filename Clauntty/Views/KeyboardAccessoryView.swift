@@ -98,7 +98,14 @@ class KeyboardAccessoryView: UIView {
 
     /// Main container (pill-shaped glass effect)
     private let containerEffectView: UIVisualEffectView = {
-        let effect = SafeGlassEffect.create(interactive: true)
+        let effect: UIVisualEffect
+        if #available(iOS 26.0, *) {
+            let glassEffect = UIGlassEffect()
+            glassEffect.isInteractive = true
+            effect = glassEffect
+        } else {
+            effect = UIBlurEffect(style: .systemMaterial)
+        }
         let view = UIVisualEffectView(effect: effect)
         view.clipsToBounds = true
         return view
@@ -1570,8 +1577,6 @@ private class CircularProgressView: UIView {
         progressLayer.cornerRadius = bounds.height / 2
     }
 
-    // For iOS 17+, ideally we'd use registerForTraitChanges,
-    // but keeping it simple for now as it's a private subview.
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         trackLayer.backgroundColor = UIColor.secondarySystemFill.cgColor
