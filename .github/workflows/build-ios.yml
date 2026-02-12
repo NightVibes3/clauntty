@@ -1,10 +1,8 @@
 name: Build iOS IPA
-
 on:
   workflow_dispatch:
   push:
     branches: [main]
-
 jobs:
   build:
     runs-on: macos-latest
@@ -20,7 +18,7 @@ jobs:
           # Use official Zig download index to find latest master
           INDEX_JSON=$(curl -s https://ziglang.org/download/index.json)
           URL=$(echo "$INDEX_JSON" | python3 -c "import sys, json; data=json.load(sys.stdin); print(data['master']['aarch64-macos']['tarball'])")
-          VERSION=$(echo "$INDEX_JSON" | python3 -c "import sys, json; data=json.load(sys.stdin); print(data['master']['version'])")
+          VERSION=$(echo "$INDEX_JSON" | python3 -c "import sys, json; data=json.load(sys.stdin); print(data['master'][''])")
           echo "Installing Zig $VERSION from $URL"
           curl -L "$URL" -o zig.tar.xz
           mkdir -p "$HOME/zig"
@@ -29,63 +27,39 @@ jobs:
           # Export to shared environment for following steps
           echo "ZIG_EXE=$HOME/zig/zig" >> $GITHUB_ENV
 
-      - name: Build rtach
-        run: |
-          cd "$HOME/clauntty-build/rtach"
-          # The hash might already be correct, but let's ensure it is
-          zig fetch https://github.com/allyourcodebase/zlib/archive/refs/heads/main.tar.gz || true
-
       - name: Clone dependencies
         run: |
           # Use HOME for writable space
           BUILD_DIR="$HOME/clauntty-build"
           mkdir -p "$BUILD_DIR"
           cd "$BUILD_DIR"
-          
           echo "=== Copying clauntty to build dir ==="
           cp -R "$GITHUB_WORKSPACE" "$BUILD_DIR/clauntty"
           ls -la "$BUILD_DIR/clauntty"
-          
           echo "=== Cloning dependencies ==="
           git clone https://github.com/eriklangille/rtach.git
           git clone -b clauntty https://github.com/eriklangille/ghostty.git
           git clone https://github.com/mitchellh/libxev.git
-          
           echo "=== Final structure ==="
           ls -la "$BUILD_DIR"
 
       - name: Build rtach
         run: |
           cd "$HOME/clauntty-build/rtach"
-          # Patch zlib hash and force local libxev path
-          python3 -c "
-          import re
-          content = open('build.zig.zon').read()
-          content = content.replace('zlib-1.3.1-ZZQ7lc8NAABUbHzDe_cSWboCqMbrLkVwvFkKnojgeiT2', 'zlib-1.3.1-1-ZZQ7ldENAAA7qJjUXP6E6xnRuV-jDL9dyoJFc_eb3zQ6')
-          content = re.sub(r'\.libxev\s*=\s*\.\{.*?\},', '.libxev = .{ .path = \"../libxev\" },', content, flags=re.DOTALL)
-          open('build.zig.zon', 'w').write(content)
-          "
+          # Update zlib hash
+          zig fetch https://github.com/allyourcodebase/zlib/archive/refs/heads/main.tar.gz || true
           zig build cross
 
       - name: Initialize Xcode
         run: |
           xcodebuild -version
           xcode-select -p
-          sudo xcodebuild -runFirstLaunch
           xcodebuild -downloadComponent MetalToolchain || true
 
       - name: Build Ghostty framework
         run: |
           cd "$HOME/clauntty-build/ghostty"
-          # Force local libxev path
-          python3 -c "
-          import re
-          content = open('build.zig.zon').read()
-          content = re.sub(r'\.libxev\s*=\s*\.\{.*?\},', '.libxev = .{ .path = \"../libxev\" },', content, flags=re.DOTALL)
-          open('build.zig.zon', 'w').write(content)
-          "
           zig build -Demit-xcframework -Doptimize=ReleaseFast -Demit-macos-app=false
-          
           echo "=== Verifying GhosttyKit.xcframework ==="
           if [ -d "macos/GhosttyKit.xcframework" ]; then
             ls -R macos/GhosttyKit.xcframework
@@ -97,14 +71,11 @@ jobs:
       - name: Setup Frameworks
         run: |
           cd "$HOME/clauntty-build/clauntty"
-          
           rm -rf Frameworks/GhosttyKit.xcframework
           mkdir -p Frameworks
           cp -R "$HOME/clauntty-build/ghostty/macos/GhosttyKit.xcframework" Frameworks/
-          
-          echo "=== Verifying link path ==="
           ls -la Frameworks/GhosttyKit.xcframework
-          
+
       - name: Copy rtach binaries
         run: |
           cd "$HOME/clauntty-build/clauntty"
@@ -112,22 +83,11 @@ jobs:
             mkdir -p Clauntty/Resources/rtach
             cp "$HOME/clauntty-build/rtach/zig-out/bin"/* Clauntty/Resources/rtach/ || true
           fi
-          echo "=== Verifying rtach binaries ==="
           ls -R Clauntty/Resources/rtach
 
       - name: Build and Package IPA
         run: |
           cd "$HOME/clauntty-build/clauntty"
-          
-          # Project file adjustments from user advice
-          # Using placeholders - user can change these or we can automate if provided
-          sed -i "" "s/65533RB4LC/${{ secrets.DEVELOPER_ID || '65533RB4LC' }}/g" Clauntty.xcodeproj/project.pbxproj
-          sed -i "" "s/com.octerm.clauntty/${{ secrets.BUNDLE_ID || 'com.octerm.clauntty' }}/g" Clauntty.xcodeproj/project.pbxproj
-
-          # Force package resolution
-          xcodebuild -resolvePackageDependencies
-          
-          # Build
           xcodebuild -project Clauntty.xcodeproj \
             -scheme Clauntty \
             -sdk iphoneos \
@@ -138,22 +98,11 @@ jobs:
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO \
             clean archive
-          
-          # Package
           mkdir -p build/Payload
-          if [ -d "build/App.xcarchive/Products/Applications/Clauntty.app" ]; then
-            cp -r build/App.xcarchive/Products/Applications/Clauntty.app build/Payload/
-            cd build && zip -r Clauntty.ipa Payload
-          else
-            echo "ERROR: Clauntty.app not found in archive"
-            # List contents to help debug
-            ls -R build/App.xcarchive
-            exit 1
-          fi
-          
-          # Copy to workspace for upload
+          cp -r build/App.xcarchive/Products/Applications/Clauntty.app build/Payload/
+          cd build && zip -r Clauntty.ipa Payload
           mkdir -p "$GITHUB_WORKSPACE/build"
-          cp build/Clauntty.ipa "$GITHUB_WORKSPACE/build/"
+          cp Clauntty.ipa "$GITHUB_WORKSPACE/build/"
 
       - name: Upload IPA
         uses: actions/upload-artifact@v4
