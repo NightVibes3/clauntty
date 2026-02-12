@@ -42,13 +42,26 @@ jobs:
       - name: Build rtach
         run: |
           cd "$HOME/clauntty-build/rtach"
-          # Patch zlib hash mismatch
-          sed -i '' 's/zlib-1.3.1-ZZQ7lc8NAABUbHzDe_cSWboCqMbrLkVwvFkKnojgeiT2/zlib-1.3.1-1-ZZQ7ldENAAA7qJjUXP6E6xnRuV-jDL9dyoJFc_eb3zQ6/g' build.zig.zon
+          # Patch zlib hash and force local libxev path
+          python3 -c "
+          import re
+          content = open('build.zig.zon').read()
+          content = content.replace('zlib-1.3.1-ZZQ7lc8NAABUbHzDe_cSWboCqMbrLkVwvFkKnojgeiT2', 'zlib-1.3.1-1-ZZQ7ldENAAA7qJjUXP6E6xnRuV-jDL9dyoJFc_eb3zQ6')
+          content = re.sub(r'\.libxev\s*=\s*\.\{.*?\},', '.libxev = .{ .path = \"../libxev\" },', content, flags=re.DOTALL)
+          open('build.zig.zon', 'w').write(content)
+          "
           zig build cross
 
       - name: Build Ghostty framework
         run: |
           cd "$HOME/clauntty-build/ghostty"
+          # Force local libxev path
+          python3 -c "
+          import re
+          content = open('build.zig.zon').read()
+          content = re.sub(r'\.libxev\s*=\s*\.\{.*?\},', '.libxev = .{ .path = \"../libxev\" },', content, flags=re.DOTALL)
+          open('build.zig.zon', 'w').write(content)
+          "
           zig build -Demit-xcframework -Doptimize=ReleaseFast -Demit-macos-app=false
           ls -la "$HOME/clauntty-build/ghostty/zig-out/"
 
