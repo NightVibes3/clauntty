@@ -1,0 +1,69 @@
+# Codemagic configuration for Clauntty (Ghostty-based iOS Terminal)
+# Current Date: Feb 13, 2026
+workflows:
+  ios-release:
+    name: Clauntty iOS Build
+    max_build_duration: 60
+    instance_type: mac_mini_m2 # Required for high-performance builds
+    environment:
+      groups:
+        - app_store_credentials # Ensure you have these defined in Codemagic UI
+      vars:
+        ZIG_VERSION: "0.13.0" # Match the Ghostty dependency requirement
+        XCODE_SCHEME: "Clauntty"
+        XCODE_WORKSPACE: "Clauntty.xcworkspace"
+      xcode: 26.2 # Based on your build log
+    
+    scripts:
+      - name: Install System Dependencies
+        script: |
+          brew install gettext pkg-config
+          
+      - name: Install Zig (Fixed Tar Error)
+        script: |
+          # 1. Determine architecture and download
+          # Using -L to follow redirects and -o to ensure the file name is correct
+          echo "Downloading Zig $ZIG_VERSION for aarch64..."
+          curl -L "https://ziglang.org/download/$ZIG_VERSION/zig-macos-aarch64-$ZIG_VERSION.tar.xz" -o zig.tar.xz
+          
+          # 2. Extract using J flag for .xz and strip components
+          mkdir -p zig-bin
+          tar -xJf zig.tar.xz -C zig-bin --strip-components 1
+          
+          # 3. Add to PATH for subsequent steps
+          echo "$PWD/zig-bin" >> $CM_BUILD_PATH
+          ./zig-bin/zig version
+          
+      - name: Build Ghostty/Rtach Dependencies
+        script: |
+          # Use Zig to build the underlying Ghostty library
+          # These steps align with the Ghostty build process
+          cd ghostty
+          zig build -Doptimize=ReleaseFast -Dtarget=aarch64-ios
+          cd ..
+          
+      - name: Set up iOS Code Signing
+        script: |
+          # Use Codemagic's automatic signing tool
+          xcode-project use-profiles
+          
+      - name: Build iOS IPA
+        script: |
+          # Build the final project
+          xcode-project build-ipa \
+            --workspace "$CM_BUILD_DIR/$XCODE_WORKSPACE" \
+            --scheme "$XCODE_SCHEME" \
+            --archive-flags "-allowProvisioningUpdates"
+
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - zig-out/Ghostty.app # If you also want the compiled library
+      - /tmp/xcodebuild_logs/*.log
+
+    publishing:
+      email:
+        recipients:
+          - your-email@example.com
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
