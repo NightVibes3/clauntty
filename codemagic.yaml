@@ -1,69 +1,63 @@
-# Codemagic configuration for Clauntty (Ghostty-based iOS Terminal)
-# Current Date: Feb 13, 2026
+# Codemagic config for unsigned IPA builds
 workflows:
   ios-release:
     name: Clauntty iOS Build
     max_build_duration: 60
-    instance_type: mac_mini_m2 # Required for high-performance builds
+    instance_type: mac_mini_m2
     environment:
-      groups:
-        - app_store_credentials # Ensure you have these defined in Codemagic UI
       vars:
-        ZIG_VERSION: "0.13.0" # Match the Ghostty dependency requirement
+        ZIG_VERSION: "0.15.2"
         XCODE_SCHEME: "Clauntty"
-        XCODE_WORKSPACE: "Clauntty.xcworkspace"
-      xcode: 26.2 # Based on your build log
-    
+        XCODE_PROJECT: "Clauntty.xcodeproj"
+      xcode: latest
     scripts:
-      - name: Install System Dependencies
+      - name: Install dependencies
         script: |
           brew install gettext pkg-config
-          
-      - name: Install Zig (Fixed Tar Error)
+      - name: Clone and build Ghostty
         script: |
-          # 1. Determine architecture and download
-          # Using -L to follow redirects and -o to ensure the file name is correct
-          echo "Downloading Zig $ZIG_VERSION for aarch64..."
+          # Install Zig
           curl -L "https://ziglang.org/download/$ZIG_VERSION/zig-macos-aarch64-$ZIG_VERSION.tar.xz" -o zig.tar.xz
-          
-          # 2. Extract using J flag for .xz and strip components
           mkdir -p zig-bin
-          tar -xJf zig.tar.xz -C zig-bin --strip-components 1
-          
-          # 3. Add to PATH for subsequent steps
-          echo "$PWD/zig-bin" >> $CM_BUILD_PATH
-          ./zig-bin/zig version
-          
-      - name: Build Ghostty/Rtach Dependencies
-        script: |
-          # Use Zig to build the underlying Ghostty library
-          # These steps align with the Ghostty build process
+          tar -xJf zig.tar.xz -C zig-bin --strip-components=1
+          export PATH="$PWD/zig-bin:$PATH"
+
+          # Clone deps
+          git clone https://github.com/eriklangille/rtach.git
+          git clone -b clauntty https://github.com/eriklangille/ghostty.git
+          git clone https://github.com/mitchellh/libxev.git
+
+          # Build Ghostty
           cd ghostty
-          zig build -Doptimize=ReleaseFast -Dtarget=aarch64-ios
+          zig build -Demit-xcframework -Doptimize=ReleaseFast -Demit-macos-app=false
           cd ..
-          
-      - name: Set up iOS Code Signing
+      - name: Setup Frameworks
         script: |
-          # Use Codemagic's automatic signing tool
-          xcode-project use-profiles
-          
-      - name: Build iOS IPA
+          rm -rf Frameworks/GhosttyKit.xcframework
+          mkdir -p Frameworks
+          cp -R ghostty/macos/GhosttyKit.xcframework Frameworks/
+      - name: Build unsigned IPA
         script: |
-          # Build the final project
-          xcode-project build-ipa \
-            --workspace "$CM_BUILD_DIR/$XCODE_WORKSPACE" \
-            --scheme "$XCODE_SCHEME" \
-            --archive-flags "-allowProvisioningUpdates"
+          mkdir -p build
+          xcodebuild -project "$XCODE_PROJECT" \
+            -scheme "$XCODE_SCHEME" \
+            -sdk iphoneos \
+            -configuration Release \
+            -destination 'generic/platform=iOS' \
+            -archivePath "$PWD/build/Clauntty.xcarchive" \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
+            clean archive
 
+          # Package IPA
+          mkdir -p Payload
+          cp -r "build/Clauntty.xcarchive/Products/Applications/Clauntty.app" Payload/
+          zip -r Clauntty.ipa Payload
     artifacts:
-      - build/ios/ipa/*.ipa
-      - zig-out/Ghostty.app # If you also want the compiled library
-      - /tmp/xcodebuild_logs/*.log
-
+      - Clauntty.ipa
     publishing:
       email:
         recipients:
-          - your-email@example.com
-      app_store_connect:
-        auth: integration
-        submit_to_testflight: true
+          - bobbytatum12@gmail.com
+        attach_build: true
