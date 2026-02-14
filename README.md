@@ -1,6 +1,6 @@
 # Clauntty
 
-iOS SSH terminal with persistent sessions and GPU-accelerated rendering.
+IPA in releases with liquid glass removed. A iOS SSH terminal with persistent sessions and GPU-accelerated rendering.
 
 ## Why Clauntty?
 
