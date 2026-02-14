@@ -93,8 +93,8 @@ class SSHConnection: ObservableObject {
             // Create client bootstrap
             let bootstrap = ClientBootstrap(group: group)
                 .channelInitializer { channel in
-                    // Add SSH handler
-                    channel.pipeline.addHandlers([
+                    // Add SSH handler - must return EventLoopFuture<Void>
+                    return channel.pipeline.addHandlers([
                         NIOSSHHandler(
                             role: .client(.init(
                                 userAuthDelegate: SSHAuthenticator(
