@@ -1,14 +1,24 @@
 name: Build iOS IPA
+
 on:
   workflow_dispatch:
+    inputs:
+      build_liquid_glass:
+        description: 'Build Liquid Glass variant?'
+        required: false
+        default: true
+        type: boolean
   push:
     branches: [main]
+
 jobs:
-  build:
+  build-legacy:
+    name: Build Legacy IPA (UIBlurEffect)
     runs-on: macos-latest
     steps:
       - name: Check out clauntty
         uses: actions/checkout@v4
+
       - name: Setup Zig 0.15.2
         run: |
           ZIG_URL="https://ziglang.org/download/0.15.2/zig-aarch64-macos-0.15.2.tar.xz"
@@ -16,6 +26,7 @@ jobs:
           mkdir -p "$HOME/zig"
           tar -xJf zig.tar.xz -C "$HOME/zig" --strip-components=1
           echo "$HOME/zig" >> $GITHUB_PATH
+
       - name: Clone dependencies
         run: |
           BUILD_DIR="$HOME/clauntty-build"
@@ -25,17 +36,20 @@ jobs:
           git clone https://github.com/eriklangille/rtach.git
           git clone -b clauntty https://github.com/eriklangille/ghostty.git
           git clone https://github.com/mitchellh/libxev.git
+
       - name: Build Ghostty framework
         run: |
           cd "$HOME/clauntty-build/ghostty"
           zig build -Demit-xcframework -Doptimize=ReleaseFast -Demit-macos-app=false
+
       - name: Setup Frameworks
         run: |
           cd "$HOME/clauntty-build/clauntty"
           rm -rf Frameworks/GhosttyKit.xcframework
           mkdir -p Frameworks
           cp -R "$HOME/clauntty-build/ghostty/macos/GhosttyKit.xcframework" Frameworks/
-      - name: Build and Package IPA
+
+      - name: Build and Package Legacy IPA (iOS 17+)
         run: |
           cd "$HOME/clauntty-build/clauntty"
           mkdir -p build
@@ -49,30 +63,135 @@ jobs:
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO \
             clean archive | tee xcodebuild.log || EXIT_CODE=$?
+          
           ARCHIVE_PATH="build/Clauntty.xcarchive"
           if [ -d "$ARCHIVE_PATH" ]; then
             mkdir -p Payload
             cp -r "$ARCHIVE_PATH/Products/Applications/Clauntty.app" Payload/ 2>/dev/null || \
-              cp -r "build/Release-iphoneos/Clauntty.app" Payload/ 2>/dev/null || \
-              find ~/Library/Developer/Xcode/DerivedData -path "*/Products/Applications/*.app" -exec cp -r {} Payload/ \; 2>/dev/null
-            zip -r Clauntty.ipa Payload
-            cp Clauntty.ipa "$GITHUB_WORKSPACE/"
+            cp -r "build/Release-iphoneos/Clauntty.app" Payload/ 2>/dev/null || \
+            find ~/Library/Developer/Xcode/DerivedData -path "*/Products/Applications/*.app" -exec cp -r {} Payload/ \; 2>/dev/null
+            zip -r Clauntty-Legacy.ipa Payload
+            cp Clauntty-Legacy.ipa "$GITHUB_WORKSPACE/"
           else
             echo "=== ERROR: Archive not found ==="
             ls -la build/ 2>/dev/null || true
             exit 1
           fi
-      - name: Upload build logs
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: xcodebuild-logs
-          path: /Users/runner/clauntty-build/clauntty/xcodebuild.log
-          retention-days: 1
-      - name: Upload IPA
+
+      - name: Upload Legacy IPA
         if: success()
         uses: actions/upload-artifact@v4
         with:
-          name: Clauntty-IPA
-          path: Clauntty.ipa
+          name: Clauntty-Legacy-IPA
+          path: Clauntty-Legacy.ipa
           retention-days: 7
+
+      - name: Upload build logs (if failed)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: xcodebuild-logs-legacy
+          path: /Users/runner/clauntty-build/clauntty/xcodebuild.log
+          retention-days: 1
+
+  build-liquid-glass:
+    name: Build Liquid Glass IPA (UIGlassEffect)
+    runs-on: macos-latest
+    if: ${{ github.event.inputs.build_liquid_glass != false }}
+    steps:
+      - name: Check out clauntty
+        uses: actions/checkout@v4
+
+      - name: Setup Xcode Beta (iOS 26 SDK)
+        run: |
+          # Check for available Xcode versions
+          ls -la /Applications/ | grep -i xcode
+          # Try to use Xcode 16.0 or later (beta)
+          if [ -d "/Applications/Xcode_16.0.app" ]; then
+            sudo xcode-select -s /Applications/Xcode_16.0.app/Contents/Developer
+          elif [ -d "/Applications/Xcode_16.1.app" ]; then
+            sudo xcode-select -s /Applications/Xcode_16.1.app/Contents/Developer
+          elif [ -d "/Applications/Xcode-beta.app" ]; then
+            sudo xcode-select -s /Applications/Xcode-beta.app/Contents/Developer
+          else
+            echo "Using default Xcode - may not support iOS 26 SDK"
+          fi
+          xcrun xcodebuild -version
+          xcrun --show-sdk-path
+
+      - name: Setup Zig 0.15.2
+        run: |
+          ZIG_URL="https://ziglang.org/download/0.15.2/zig-aarch64-macos-0.15.2.tar.xz"
+          curl -L "$ZIG_URL" -o zig.tar.xz
+          mkdir -p "$HOME/zig"
+          tar -xJf zig.tar.xz -C "$HOME/zig" --strip-components=1
+          echo "$HOME/zig" >> $GITHUB_PATH
+
+      - name: Clone dependencies
+        run: |
+          BUILD_DIR="$HOME/clauntty-build"
+          mkdir -p "$BUILD_DIR"
+          cd "$BUILD_DIR"
+          cp -R "$GITHUB_WORKSPACE" "$BUILD_DIR/clauntty"
+          git clone https://github.com/eriklangille/rtach.git
+          git clone -b clauntty https://github.com/eriklangille/ghostty.git
+          git clone https://github.com/mitchellh/libxev.git
+
+      - name: Build Ghostty framework
+        run: |
+          cd "$HOME/clauntty-build/ghostty"
+          zig build -Demit-xcframework -Doptimize=ReleaseFast -Demit-macos-app=false
+
+      - name: Setup Frameworks
+        run: |
+          cd "$HOME/clauntty-build/clauntty"
+          rm -rf Frameworks/GhosttyKit.xcframework
+          mkdir -p Frameworks
+          cp -R "$HOME/clauntty-build/ghostty/macos/GhosttyKit.xcframework" Frameworks/
+
+      - name: Build and Package Liquid Glass IPA (iOS 26+)
+        run: |
+          cd "$HOME/clauntty-build/clauntty"
+          mkdir -p build
+          # Build with LIQUID_GLAS S flag
+          xcodebuild -project Clauntty.xcodeproj \
+            -scheme Clauntty \
+            -sdk iphoneos \
+            -configuration Release \
+            -destination 'generic/platform=iOS' \
+            -archivePath "$PWD/build/Clauntty.xcarchive" \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
+            OTHER_SWIFT_FLAGS="-DLIQUID_GLASS" \
+            clean archive | tee xcodebuild.log || EXIT_CODE=$?
+          
+          ARCHIVE_PATH="build/Clauntty.xcarchive"
+          if [ -d "$ARCHIVE_PATH" ]; then
+            mkdir -p Payload
+            cp -r "$ARCHIVE_PATH/Products/Applications/Clauntty.app" Payload/ 2>/dev/null || \
+            cp -r "build/Release-iphoneos/Clauntty.app" Payload/ 2>/dev/null || \
+            find ~/Library/Developer/Xcode/DerivedData -path "*/Products/Applications/*.app" -exec cp -r {} Payload/ \; 2>/dev/null
+            zip -r Clauntty-LiquidGlass.ipa Payload
+            cp Clauntty-LiquidGlass.ipa "$GITHUB_WORKSPACE/"
+          else
+            echo "=== ERROR: Archive not found ==="
+            ls -la build/ 2>/dev/null || true
+            exit 1
+          fi
+
+      - name: Upload Liquid Glass IPA
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Clauntty-LiquidGlass-IPA
+          path: Clauntty-LiquidGlass.ipa
+          retention-days: 7
+
+      - name: Upload build logs (if failed)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: xcodebuild-logs-liquidglass
+          path: /Users/runner/clauntty-build/clauntty/xcodebuild.log
+          retention-days: 1

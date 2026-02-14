@@ -97,14 +97,23 @@ class KeyboardAccessoryView: UIView {
     // MARK: - Views
 
     /// Main container (pill-shaped glass effect)
-    private let containerEffectView: UIVisualEffectView = {
-        let effect: UIVisualEffect
+/// Main container (pill-shaped glass effect)
+/// Use LIQUID_GLASS=1 build flag to enable UIGlassEffect on iOS 26+
+private let containerEffectView: UIVisualEffectView = {
+    let effect: UIVisualEffect
+    #if LIQUID_GLASS
+    if #available(iOS 26.0, *) {
+        effect = UIGlassEffect(style: .systemMaterial)
+    } else {
         effect = UIBlurEffect(style: .systemMaterial)
-        let view = UIVisualEffectView(effect: effect)
-        view.clipsToBounds = true
-        return view
-    }()
-
+    }
+    #else
+    effect = UIBlurEffect(style: .systemMaterial)
+    #endif
+    let view = UIVisualEffectView(effect: effect)
+    view.clipsToBounds = true
+    return view
+}()
     /// Left stack view for buttons before nipple
     private let leftStackView = UIStackView()
 
