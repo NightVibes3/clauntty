@@ -36,22 +36,19 @@ class SSHAuthenticator: NIOSSHClientUserAuthenticationDelegate {
             triedPassword = true
 
             // Get password from Keychain
-            // This is called from NIO thread, so we need to handle async carefully
-            Task { @MainActor in
-                do {
-                    // In a real implementation, you'd pass the connection ID
-                    // For now, we'll assume password is already loaded
-                    let password = try self.getStoredPassword()
+            do {
+                // In a real implementation, you'd pass the connection ID
+                // For now, we'll assume password is already loaded
+                let password = try self.getStoredPassword()
 
-                    let offer = NIOSSHUserAuthenticationOffer(
-                        username: self.username,
-                        serviceName: "ssh-connection",
-                        offer: .password(.init(password: password))
-                    )
-                    nextChallengePromise.succeed(offer)
-                } catch {
-                    nextChallengePromise.succeed(nil)
-                }
+                let offer = NIOSSHUserAuthenticationOffer(
+                    username: self.username,
+                    serviceName: "ssh-connection",
+                    offer: .password(.init(password: password))
+                )
+                nextChallengePromise.succeed(offer)
+            } catch {
+                nextChallengePromise.fail(error)
             }
 
         case .sshKey(let keyId):
@@ -64,23 +61,21 @@ class SSHAuthenticator: NIOSSHClientUserAuthenticationDelegate {
 
             triedKey = true
 
-            Task { @MainActor in
-                do {
-                    Logger.clauntty.debugOnly("SSH auth: loading private key \(keyId.prefix(8))...")
-                    let privateKey = try self.loadPrivateKey(keyId: keyId)
-                    Logger.clauntty.debugOnly("SSH auth: key loaded, sending offer for user '\(self.username)'")
+            do {
+                Logger.clauntty.debugOnly("SSH auth: loading private key \(keyId.prefix(8))...")
+                let privateKey = try self.loadPrivateKey(keyId: keyId)
+                Logger.clauntty.debugOnly("SSH auth: key loaded, sending offer for user '\(self.username)'")
 
-                    let offer = NIOSSHUserAuthenticationOffer(
-                        username: self.username,
-                        serviceName: "ssh-connection",
-                        offer: .privateKey(.init(privateKey: privateKey))
-                    )
-                    nextChallengePromise.succeed(offer)
-                    Logger.clauntty.debugOnly("SSH auth: offer sent")
-                } catch {
-                    Logger.clauntty.error("SSH auth: failed to load SSH key: \(error.localizedDescription)")
-                    nextChallengePromise.succeed(nil)
-                }
+                let offer = NIOSSHUserAuthenticationOffer(
+                    username: self.username,
+                    serviceName: "ssh-connection",
+                    offer: .privateKey(.init(privateKey: privateKey))
+                )
+                nextChallengePromise.succeed(offer)
+                Logger.clauntty.debugOnly("SSH auth: offer sent")
+            } catch {
+                Logger.clauntty.error("SSH auth: failed to load SSH key: \(error.localizedDescription)")
+                nextChallengePromise.fail(error)
             }
         }
     }
